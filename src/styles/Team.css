@@ -1,0 +1,181 @@
+/* --- BASE DA SECÇÃO --- */
+.team-section {
+  padding: 100px 50px;
+  background-color: #f8f9fa; /* Fundo claro por defeito */
+  color: #555;
+  transition: all 0.4s ease;
+}
+
+/* VERSÃO DARK (Ativada pelo switch da Navbar) */
+.team-section.dark {
+  background-color: #1a1c23; /* Fundo escuro industrial */
+  color: #ccc;
+}
+
+.team-container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.team-header {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+/* O título muda de cor conforme o tema */
+.team-header h2 {
+  font-size: 38px;
+  color: #1a1c23; 
+  margin-bottom: 10px;
+  transition: 0.3s;
+}
+.team-section.dark .team-header h2 { color: #ffffff; }
+
+/* A linha azul Sentinel (Mantive o teu estilo!) */
+.border-meghna {
+  border-top: 2px solid rgba(0, 0, 0, 0.07);
+  width: 30%;
+  margin: 15px auto 0;
+  position: relative;
+}
+.dark .border-meghna { border-top-color: rgba(255, 255, 255, 0.1); }
+
+.border-meghna:before {
+  content: '';
+  background-color: #57cbcc;
+  height: 6px;
+  width: 50px;
+  position: absolute;
+  left: 50%;
+  margin-left: -25px;
+  top: -4px;
+}
+
+/* --- GRELHA 3x3 (Forçada para Desktop) --- */
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 colunas perfeitas */
+  gap: 40px;
+}
+
+/* --- EFEITOS DO CARD DA EQUIPA --- */
+.team-member {
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+.dark .team-member {
+  background-color: #292f36;
+  box-shadow: none;
+}
+
+/* FOTOS UNIFORMES (O segredo para serem todas iguais!) */
+.member-photo {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1; /* Força um QUADRADO perfeito */
+}
+
+.member-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* A foto preenche sem distorcer */
+  display: block;
+  transition: all 0.4s ease;
+}
+
+.member-photo:hover img { transform: scale(1.1); }
+
+/* A Máscara Mágica (Roda e Aparece) - O Teu Efeito! */
+.member-photo .mask {
+  background-color: rgba(87, 203, 204, 0.8);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.5s ease-out;
+  transform: rotateY(180deg) scale(0.5);
+  z-index: 2;
+}
+
+.team-member:hover .mask {
+  opacity: 1;
+  transform: rotateY(0) scale(1);
+}
+
+.social-links a {
+  display: inline-block;
+  color: #fff;
+  border: 1px solid #fff;
+  padding: 8px 12px;
+  margin: 0 5px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.social-links a:hover {
+  background-color: #fff;
+  color: #57cbcc;
+}
+
+.member-meta {
+  padding: 25px;
+  text-align: center;
+}
+
+.member-meta h4 {
+  color: #1a1c23;
+  font-size: 20px;
+  margin-bottom: 5px;
+  transition: 0.3s;
+}
+.dark .member-meta h4 { color: #ffffff; }
+
+.member-meta span {
+  font-size: 14px;
+  color: #57cbcc;
+  font-weight: 700;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 10px;
+}
+
+/* Responsividade: para o telefone não ficar minúsculo */
+@media (max-width: 992px) {
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .team-grid { grid-template-columns: 1fr; }
+}
+/* --- ÍCONES SOCIAIS NA EQUIPA --- */
+.social-links {
+  display: flex;
+  gap: 15px; /* Espaço entre o logo do CV e do LinkedIn */
+  justify-content: center;
+}
+
+.social-icon {
+  width: 35px; /* Tamanho perfeito para clicar (especialmente no telemóvel) */
+  height: 35px;
+  object-fit: contain; /* Garante que o logo não fica esticado/distorcido */
+  transition: transform 0.3s ease; /* Prepara a animação */
+}
+
+/* Um toque tático: o ícone aumenta ligeiramente quando passas o rato */
+.social-links a:hover .social-icon {
+  transform: scale(1.15);
+}
+
+/* Opcional: Se o teu logo do CV for muito escuro e "desaparecer" no Dark Mode, podes forçá-lo a ficar branco no telemóvel/PC */
+.dark .social-icon {
+  /* Se precisares de inverter as cores de ícones pretos no modo escuro */
+  /* filter: invert(1); */ 
+}
