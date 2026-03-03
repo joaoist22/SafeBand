@@ -15,7 +15,7 @@ const teamMembers = [
     id: 1,
         name: "João Sousa",
         role: "Engenheiro de Hardware",
-        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        desc: "",
         li: "www.linkedin.com/in/joaof-sousa",
         
         // 2. USA A VARIÁVEL AQUI (Sem aspas!)
@@ -25,7 +25,7 @@ const teamMembers = [
     id: 2,
         name: "Bárbara Modesto",
         role: "Engenheira de Software",
-        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        desc: "",
         li: "https://www.linkedin.com/in/b%C3%A1rbara-gon%C3%A7alves-modesto-a75505297",
         // 2. USA A VARIÁVEL AQUI (Sem aspas!)
         photo: fotoBarbara 
@@ -34,7 +34,7 @@ const teamMembers = [
     id: 3,
     name: "Juan López",
     role: "Designer UI/UX",
-    desc: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.",
+    desc: "",
     li: "https://www.linkedin.com/in/juan-lopes-431476269",
     photo: fotoJuan 
   },
@@ -42,7 +42,7 @@ const teamMembers = [
     id: 4,
         name: "João Falardo",
         role: "Engenheiro de Hardware",
-        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        desc: "",
         li: "https://www.linkedin.com/in/joão-falardo-2a4920229",
         
         // 2. USA A VARIÁVEL AQUI (Sem aspas!)
@@ -52,7 +52,7 @@ const teamMembers = [
     id: 5,  
         name: "Valentim Maksymchuk",
         role: "Engenheiro de Software",
-        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        desc: "",
         li: "https://www.linkedin.com/in/valentim-maksymchuk-506659333/", 
 
         // 2. USA A VARIÁVEL AQUI (Sem aspas!)  
@@ -62,7 +62,7 @@ const teamMembers = [
     id: 6,
         name: "João de Jesus",
         role: "Engenheiro de Software",
-        desc: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+        desc: "",
         li: "https://www.linkedin.com/in/joaojesus9000/",
         
         // 2. USA A VARIÁVEL AQUI (Sem aspas!)

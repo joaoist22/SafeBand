@@ -145,23 +145,48 @@
 }
 
 /* Responsivo para Telemóveis */
+/* ... (Mantém os teus estilos de PC até à linha do @media) ... */
+
+/* =========================================
+   RESPONSIVIDADE (Telemóvel e Tablet)
+   ========================================= */
 @media (max-width: 768px) {
-  .contact-grid {
-    grid-template-columns: 1fr;
+  .contact-section {
+    padding: 60px 20px; /* Reduz o padding para ganhar espaço no ecrã */
   }
+
+  .contact-grid {
+    grid-template-columns: 1fr; /* Coluna única: Formulário em cima, Info em baixo */
+    gap: 40px;
+  }
+
+  .contact-form-box {
+    padding: 25px; /* Menos margem interna para o formulário não parecer apertado */
+  }
+
   .input-group {
-    flex-direction: column;
+    flex-direction: column; /* Nome e Email ficam um por cima do outro */
+    gap: 15px;
+  }
+
+  .contact-header h2 {
+    font-size: 30px; /* Título mais equilibrado para telemóvel */
+  }
+
+  .map-container {
+    height: 300px; /* Aumentamos um pouco a altura para ser mais fácil navegar no mapa */
+    margin-top: 20px;
   }
 }
-/* --- AJUSTES PARA MODO ESCURO --- */
 
-/* 1. Fundo Geral da Secção */
+/* =========================================
+   AJUSTES PARA MODO ESCURO (Dark Mode)
+   ========================================= */
 .contact-section.dark {
-  background-color: #1a1c23; /* Mesma cor industrial da equipa */
+  background-color: #0f1115; /* Preto Sentinel Dark para consistência total */
   transition: all 0.3s ease;
 }
 
-/* 2. Cores de Texto */
 .contact-section.dark .contact-header h2,
 .contact-section.dark .info-item h4 {
   color: #ffffff;
@@ -169,36 +194,43 @@
 
 .contact-section.dark .contact-header p,
 .contact-section.dark .info-item p {
-  color: #ccc;
+  color: #b0b0b0; /* Cinza suave para evitar cansaço visual */
 }
 
-/* 3. A Caixa do Formulário */
 .contact-section.dark .contact-form-box {
-  background-color: #292f36; /* Um cinza ligeiramente mais claro que o fundo */
-  box-shadow: none;
+  background-color: #1a1c23; /* Fundo das boxes ligeiramente mais claro que o fundo geral */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
 }
 
-/* 4. Inputs, Select e Textarea no modo escuro */
 .contact-section.dark .form input, 
 .contact-section.dark .form textarea, 
 .contact-section.dark .form-select {
-  background-color: #1a1c23;
-  border-color: #444;
+  background-color: #0f1115;
+  border-color: #333;
   color: #fff;
+}
+
+/* Corrigir o texto do "placeholder" no modo escuro para que se consiga ler */
+.contact-section.dark .form input::placeholder,
+.contact-section.dark .form textarea::placeholder {
+  color: #666;
 }
 
 .contact-section.dark .form input:focus, 
 .contact-section.dark .form textarea:focus, 
 .contact-section.dark .form-select:focus {
   border-color: #57cbcc;
+  box-shadow: 0 0 0 3px rgba(87, 203, 204, 0.1);
 }
 
-/* 5. Ícones (Opcional: mudar o fundo do círculo do ícone) */
 .contact-section.dark .info-icon {
-  background-color: rgba(87, 203, 204, 0.1);
+  background-color: rgba(87, 203, 204, 0.15);
+  color: #57cbcc;
 }
 
-/* Corrigir a borda meghna no modo escuro */
+/* Ajuste da borda decorativa */
 .contact-section.dark .border-meghna {
-  border-top-color: rgba(255, 255, 255, 0.1);
+  border-top: 2px solid rgba(87, 203, 204, 0.3);
+  width: 50px;
+  margin: 15px auto;
 }
