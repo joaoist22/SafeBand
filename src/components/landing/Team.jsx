@@ -16,7 +16,7 @@ const teamMembers = [
         name: "João Sousa",
         role: "Engenheiro de Hardware",
         desc: "",
-        li: "www.linkedin.com/in/joaof-sousa",
+        li: "https://www.linkedin.com/in/joaof-sousa",
         
         // 2. USA A VARIÁVEL AQUI (Sem aspas!)
         photo: fotoJoao 
