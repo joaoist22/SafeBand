@@ -8,6 +8,7 @@ import Hero from './components/landing/Hero';
 import About from './components/landing/About';
 import Blog from './components/blog/Blog';
 import Post from './pages/Post';
+import Gantt from './components/landing/Gantt';
 
 import pulseiraBlack from './assets/pulseira/black.PNG'; 
 import pulseiraWhite from './assets/pulseira/white.PNG';
@@ -41,6 +42,7 @@ function App() {
               <Hero isDarkMode={isDarkMode} />
               <About isDarkMode={isDarkMode} />
               <Team isDarkMode={isDarkMode} />
+              <Gantt isDarkMode={isDarkMode} />
               <Contact isDarkMode={isDarkMode} />
             </main>
           } />

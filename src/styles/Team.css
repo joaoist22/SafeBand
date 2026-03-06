@@ -174,8 +174,3 @@
   transform: scale(1.15);
 }
 
-/* Opcional: Se o teu logo do CV for muito escuro e "desaparecer" no Dark Mode, podes forçá-lo a ficar branco no telemóvel/PC */
-.dark .social-icon {
-  /* Se precisares de inverter as cores de ícones pretos no modo escuro */
-  /* filter: invert(1); */ 
-}
