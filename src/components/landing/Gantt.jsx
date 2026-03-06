@@ -144,7 +144,7 @@ const CARD_DATA = [
   { num: '12',  label: 'Semanas de trabalho', colorVar: COLOR.cyan   },
   { num: '4',   label: 'Milestones chave',    colorVar: COLOR.yellow },
   { num: '3',   label: 'Camadas de produto',  colorVar: COLOR.green  },
-  { num: 'Mai', label: 'Target para pitch',   colorVar: COLOR.pink   },
+  { num: 'Maio', label: 'Target para pitch',   colorVar: COLOR.pink   },
 ];
 
 // ─── SUB-COMPONENTS ──────────────────────────────────────────────
