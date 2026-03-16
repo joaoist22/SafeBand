@@ -1,0 +1,43 @@
+/* Este ficheiro CSS é o ponto de partida para os estilos globais do teu projeto. 
+   Ele define as regras básicas que se aplicam a todo o site, como a limpeza de margens, 
+   a configuração da fonte e o estilo do corpo. */
+
+/*Scroll movement animation between sections*/
+html {
+  scroll-behavior: smooth;
+}
+
+/* 1. Limpar margens de todos os elementos e manter o tamanho certo */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 2. O corpo do site ocupa 100% da largura do ecrã */
+body {
+  width: 100vw;
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, sans-serif; /* Uma fonte limpa */
+  background-color: #ffffff;
+  overflow-x: hidden; /* Esconde a barra de scroll horizontal se algo sair do ecrã */
+}
+
+/* 3. A caixa principal onde o React corre */
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  /* O Vite tinha aqui um max-width e padding, já tirámos! */
+}
+/* Garante que o fundo base do navegador mude  */
+html, body, #root {
+  min-height: 100vh;
+  margin: 0;
+  transition: background-color 0.3s ease;
+}
+
+/* Quando o App.jsx tem a classe .dark, o fundo do ecrã fica escuro [cite: 4, 9] */
+.dark body {
+  background-color: #0f1115; /* Cor Sentinel Dark */
+}

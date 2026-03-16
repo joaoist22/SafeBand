@@ -1,0 +1,83 @@
+/* A cortina preta que tapa o site inteiro */
+.intro-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #050505; /* Preto quase absoluto */
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* O fundo vermelho (Agora com z-index mais alto para tapar tudo) */
+.red-flash-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: #ff004c; /* Cor do alerta Sentinel */
+  z-index: 15; /* Tapa o radar (z-index 10) mas fica atrás do logo */
+}
+
+.radar-system {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+/* A base de qualquer LED */
+.led {
+  position: absolute;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 2px currentColor; /* O brilho acompanha a cor de fundo */
+}
+
+/* Tamanhos dos LEDs */
+.center-led { width: 16px; height: 16px; z-index: 5; }
+.inner-led { width: 12px; height: 12px; z-index: 4; }
+.outer-led { width: 10px; height: 10px; z-index: 3; transition: opacity 0.5s; }
+
+.blue-led {
+  width: 14px;
+  height: 14px;
+  background-color: #0088ff;
+  box-shadow: 0 0 15px 5px rgba(0, 136, 255, 0.8);
+  z-index: 6;
+}
+
+/* O raio de ataque vermelho */
+.danger-ripple {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid #ff004c;
+  border-radius: 50%;
+  opacity: 0;
+  animation: ripple 1s ease-out forwards;
+}
+
+@keyframes ripple {
+  0% { width: 16px; height: 16px; opacity: 1; border-width: 4px; }
+  100% { width: 250px; height: 250px; opacity: 0; border-width: 0px; }
+}
+
+/* A apresentação do Logo Simples */
+.intro-logo-container {
+  z-index: 20; /* Fica por cima do fundo vermelho */
+  position: absolute; /* Mantém o logo no centro absoluto */
+}
+
+.intro-logo-simple {
+  width: 320px; /* Aumentámos o tamanho do logo! */
+  height: auto;
+  /* Sombra escura para o logo destacar muito bem contra o fundo vermelho */
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.4)); 
+}
