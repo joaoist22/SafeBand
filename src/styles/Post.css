@@ -1,0 +1,187 @@
+/* --- BASE DA PÁGINA --- */
+.post-page {
+  /* CORRIGIDO: Cortei o espaço do topo de 140px para 90px! Adeus buraco branco. */
+  padding: 90px 20px 80px; 
+  background-color: #ffffff;
+  color: #242424;
+  min-height: 100vh;
+  transition: all 0.3s ease;
+}
+
+.post-page.dark {
+  background-color: #1a1c23;
+  color: #e8e8f0;
+}
+
+/* --- ESTRUTURA: MAIOR E A OCUPAR O ECRÃ --- */
+.post-container {
+  max-width: 1350px; /* MAIOR: Aumentei para 1350px para dominar o ecrã */
+  margin: 0 auto;
+  display: flex;
+  justify-content: center; 
+  gap: 60px; /* Reduzi o buraco vazio entre o texto e a barra lateral de 80 para 60 */
+  align-items: flex-start;
+}
+
+/* --- COLUNA PRINCIPAL (ARTIGO) --- */
+.post-main {
+  flex: 1;
+  max-width: 850px; /* MAIOR: O texto e a imagem agora esticam até 850px! */
+}
+
+/* O Título Principal */
+.post-title-main {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: clamp(36px, 5vw, 48px); /* Letra bem grande */
+  font-weight: 800;
+  line-height: 1.25;
+  margin-bottom: 30px;
+  letter-spacing: -0.5px;
+  color: #1a1c23;
+}
+.post-page.dark .post-title-main { color: #ffffff; }
+
+/* O Cabeçalho do Autor */
+.post-author-header {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 40px;
+  padding-bottom: 25px;
+  border-bottom: 1px solid #eaeaea;
+}
+.post-page.dark .post-author-header { border-bottom-color: #2e3040; }
+
+/* A tua Foto redonda */
+.post-author-avatar {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%; 
+  object-fit: cover;
+  transition: opacity 0.2s;
+  background-color: #f0f0f0; 
+}
+.post-author-avatar:hover { opacity: 0.8; }
+
+.post-author-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.post-author-name {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: inherit;
+  text-decoration: none;
+}
+.post-author-name:hover { text-decoration: underline; color: var(--cyan); }
+
+.post-meta-date {
+  font-size: 15px;
+  color: #6b6b6b;
+  margin-top: 2px;
+}
+.post-page.dark .post-meta-date { color: #8890aa; }
+
+/* A Imagem do Artigo */
+.post-hero-container {
+  margin-bottom: 40px;
+}
+
+.post-hero-image {
+  width: 100%;
+  max-height: 500px; /* MAIOR: O Snoopy agora fica bem maior! */
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Corpo do Texto */
+.post-body p {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 21px; /* Fonte super confortável de ler */
+  line-height: 1.8;
+  margin-bottom: 25px;
+  white-space: pre-line;
+  color: #333;
+}
+.post-page.dark .post-body p { color: #d1d1e0; }
+
+
+/* --- COLUNA LATERAL (MAIS ARTIGOS) --- */
+.post-sidebar {
+  width: 280px; /* Ligeiramente maior para acompanhar o layout gigante */
+  flex-shrink: 0;
+  display: none; 
+}
+
+@media (min-width: 1024px) {
+  .post-sidebar { display: block; }
+}
+
+.sidebar-sticky {
+  position: sticky;
+  top: 100px; /* Acompanha o topo melhor! */
+}
+
+.sidebar-title {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #242424;
+}
+.post-page.dark .sidebar-title { color: #ffffff; }
+
+.sidebar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 35px;
+}
+
+.sidebar-card {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s;
+}
+.sidebar-card:hover { opacity: 0.7; }
+
+.sidebar-author {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.sidebar-avatar-small {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.sidebar-author-name {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #242424;
+}
+.post-page.dark .sidebar-author-name { color: #e8e8f0; }
+
+.sidebar-card-title {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 6px;
+  letter-spacing: -0.3px;
+}
+
+.sidebar-card-date {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-size: 14px;
+  color: #6b6b6b;
+}
+.post-page.dark .sidebar-card-date { color: #8890aa; }
