@@ -10,6 +10,7 @@ import fotoJesus from '../assets/equipa/Jesus.jpeg';
 import logo from '../assets/logo/logo_dif.png';
 import imgreuniao from '../assets/fotos_diversas/reuniao.jpeg';
 import fotodivisaotarefas from '../assets/fotos_diversas/divisaotarefas.jpeg';
+import imgJuanQuadro from '../assets/fotos_diversas/imgJuanQuadro.jpeg';
 
 export const postData = [
   {
@@ -64,5 +65,22 @@ export const postData = [
       image: fotodivisaotarefas,
       excerpt:"A equipa SafeBand formalizou a divisão de responsabilidades do projeto, distribuindo tarefas específicas que abrangem desde o desenvolvimento de hardware e protocolos de comunicação até à criação da WebApp e gestão da comunicação.",
       content:`Para garantir a máxima eficiência no desenvolvimento do protótipo SafeBand no âmbito do programa ElectroCap, a nossa equipa formalizou a divisão de tarefas estruturais do projeto. A distribuição de responsabilidades foi planeada para cobrir todas as frentes de engenharia e comunicação, permitindo um trabalho paralelo e focado. A coordenação da comunicação e o registo do progresso através de publicações semanais no blogue ficaram a cargo do João Jesus. A infraestrutura digital do projeto foi dividida entre o João Sousa, responsável pelo desenvolvimento do website e pela programação do backend da WebApp, e a Bárbara Modesto, que assumiu a criação da identidade visual e a programação do frontend da mesma aplicação. No domínio do hardware, o Juan Lopez foca-se no desenvolvimento e integração dos componentes da pulseira inteligente, enquanto o João Falardo lidera a montagem e o desenvolvimento do hardware das torres de receção. Por fim, a definição e a implementação dos protocolos de comunicação cruciais para a transmissão de dados estão sob a alçada do Valentim Maksymchuk. Com as áreas de intervenção claramente definidas, desde a camada física até à interface de utilizador, a equipa encontra-se a trabalhar de forma totalmente sincronizada para os próximos marcos do projeto.` 
+  },
+  {
+      id: "5",
+      tag: "materiais",
+      title: "Arquitetura e Hardware do Protótipo",
+      author: "João Jesus",
+      
+      // 2. Usar a variável da foto (Sem aspas!)
+      authorImage: fotoJesus, 
+      
+      // 3. O Link que vai abrir quando clicarem no teu nome/foto
+      authorLinkedIn: "https://www.linkedin.com/in/joaojesus9000",
+      
+      date: "24 Março, 2026",
+      image: imgJuanQuadro,
+      excerpt:"A equipa SafeBand fechou a arquitetura e a Lista de Materiais (BOM) do protótipo. Definimos o fluxo de rede (Beacon -> Pulseira -> Torre -> Servidor) focado no processamento local, onde a pulseira calcula a sua própria posição. Avançamos agora para a montagem dos circuitos com módulos ESP32, comunicação LoRa/BLE e alertas hápticos e visuais.",
+      content:`Nesta semana decisiva, a equipa SafeBand fechou a Lista de Materiais e definiu a arquitetura final do protótipo, que contará com uma torre, três beacons e seis pulseiras para a fase de demonstração. Estabelecemos que o fluxo de dados será linear, partindo dos beacons para a pulseira, desta para a torre e, por fim, para o servidor, sem qualquer comunicação direta entre beacons. Para otimizar a nossa rede, decidimos que o processamento será feito localmente. Cada pulseira calculará a sua zona através da triangulação da força do sinal dos beacons mais próximos. Além disso, para provar a escalabilidade da nossa solução, implementámos um sistema onde cada pulseira emitirá um pulso BLE durante situações de alerta, iluminando imediatamente os dispositivos vizinhos com a mesma cor. No que diz respeito ao hardware, a nossa torre utilizará um módulo LilyGo com comunicação LoRa e alimentação direta via USB-C, enquanto os beacons serão módulos BLE pré-fabricados, uma escolha estratégica para garantir estabilidade nesta fase inicial. O núcleo de todo o sistema será a pulseira, desenvolvida em torno de um microcontrolador Seeed ESP32 com LoRa e NFC integrados. Este dispositivo wearable será alimentado por uma bateria de 500mAh e estará equipado com LEDs de feedback e um motor de vibração, cujo acionamento será gerido por um transístor NMOS de forma segura. Iniciaremos os testes e a montagem do circuito numa breadboard antes de avançarmos para o desenho do PCB final, focando as nossas atenções no próximo grande desafio de engenharia: a sincronização da pulsação dos LEDs com a música do festival.` 
   }
 ];
