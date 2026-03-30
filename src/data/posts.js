@@ -11,6 +11,7 @@ import logo from '../assets/logo/logo_dif.png';
 import imgreuniao from '../assets/fotos_diversas/reuniao.jpeg';
 import fotodivisaotarefas from '../assets/fotos_diversas/divisaotarefas.jpeg';
 import imgJuanQuadro from '../assets/fotos_diversas/imgJuanQuadro.jpeg';
+import imgFestival from '../assets/fotos_diversas/festival.jpg';
 
 export const postData = [
   {
@@ -82,5 +83,30 @@ export const postData = [
       image: imgJuanQuadro,
       excerpt:"A equipa SafeBand fechou a arquitetura e a Lista de Materiais (BOM) do protótipo. Definimos o fluxo de rede (Beacon -> Pulseira -> Torre -> Servidor) focado no processamento local, onde a pulseira calcula a sua própria posição. Avançamos agora para a montagem dos circuitos com módulos ESP32, comunicação LoRa/BLE e alertas hápticos e visuais.",
       content:`Nesta semana decisiva, a equipa SafeBand fechou a Lista de Materiais e definiu a arquitetura final do protótipo, que contará com uma torre, três beacons e seis pulseiras para a fase de demonstração. Estabelecemos que o fluxo de dados será linear, partindo dos beacons para a pulseira, desta para a torre e, por fim, para o servidor, sem qualquer comunicação direta entre beacons. Para otimizar a nossa rede, decidimos que o processamento será feito localmente. Cada pulseira calculará a sua zona através da triangulação da força do sinal dos beacons mais próximos. Além disso, para provar a escalabilidade da nossa solução, implementámos um sistema onde cada pulseira emitirá um pulso BLE durante situações de alerta, iluminando imediatamente os dispositivos vizinhos com a mesma cor. No que diz respeito ao hardware, a nossa torre utilizará um módulo LilyGo com comunicação LoRa e alimentação direta via USB-C, enquanto os beacons serão módulos BLE fabricados por nós, uma escolha estratégica para garantir estabilidade nesta fase inicial. O núcleo de todo o sistema será a pulseira, desenvolvida em torno de um microcontrolador Seeed ESP32 com LoRa e NFC integrados. Este dispositivo wearable será alimentado por uma bateria de 1000mAh e estará equipado com LEDs de feedback e um motor de vibração, cujo acionamento será gerido por um transístor NMOS de forma segura. Iniciaremos os testes e a montagem do circuito numa breadboard antes de avançarmos para o desenho do PCB final, focando as nossas atenções no próximo grande desafio de engenharia: a sincronização da pulsação dos LEDs com a música do festival.` 
+  },
+  {
+      id: "6",
+      tag: "Feedback",
+      title: "Foco no Essencial: Simplificar para Salvar Vidas",
+      author: "João Jesus",
+      
+      // 2. Usar a variável da foto (Sem aspas!)
+      authorImage: fotoJesus, 
+      
+      // 3. O Link que vai abrir quando clicarem no teu nome/foto
+      authorLinkedIn: "https://www.linkedin.com/in/joaojesus9000",
+      
+      date: "30 Março, 2026",
+      image: imgFestival,
+      excerpt:"Após a mais recente reunião de orientação, a equipa SafeBand redefiniu as suas prioridades para simplificar o projeto e focar-se a 100% no sistema central de SOS. Ajustámos o hardware da demonstração, desenhámos um bloqueio inteligente para evitar alertas duplicados em situações de pânico. O nosso próximo grande marco é o Pitch Deck intermédio.",
+      content:`Nesta última semana, a equipa SafeBand teve uma reunião de alinhamento fundamental com a nossa orientação, que nos trouxe uma perspetiva muito clara: a melhor tecnologia é aquela que as pessoas entendem e usam sem esforço. Por isso, decidimos simplificar a nossa abordagem e focar o protótipo naquilo que é a nossa prioridade absoluta: o sistema de SOS.
+
+              Imaginem o seguinte cenário num festival: alguém sente-se mal e a pessoa do lado carrega no botão de emergência da pulseira SafeBand. O que acontece a seguir? A equipa médica recebe imediatamente a localização exata da ocorrência. No entanto, para evitar que o pânico se instale e que dezenas de pessoas à volta comecem também a carregar nos seus botões (criando alertas duplicados), queremos implementar um mecanismo de bloqueio inteligente. Assim que o primeiro pedido de ajuda é registado, o sistema compreende a situação e filtra temporariamente os avisos repetidos daquela área. Isto garante que os paramédicos sabem exatamente para onde ir, sem ruído, confusão ou sobrecarga de informação.
+
+              Para que esta localização funcione como um autêntico "GPS de recinto", ajustámos os nossos materiais para a demonstração prática. Estamos a pensar em distribuir pequenas antenas (os beacons) pelo espaço, que comunicam de forma invisível com 3 pulseiras: duas nos pulsos do público e uma com a equipa médica.
+
+              Os sistemas adicionais, como a recolha de dados para a organização do festival, passarão para segundo plano, servindo como complementos futuros. O objetivo agora é provar que conseguimos proteger as pessoas.
+
+              Neste momento, estamos a preparar a nossa apresentação intermédia (o Pitch Deck) e a afinar a estratégia de marketing para o Eletroday, tivemos a ideia de ter sorteios e surpresas para quem visitar a nossa banca.` 
   }
 ];
