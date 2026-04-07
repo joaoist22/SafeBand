@@ -12,6 +12,7 @@ import imgreuniao from '../assets/fotos_diversas/reuniao.jpeg';
 import fotodivisaotarefas from '../assets/fotos_diversas/divisaotarefas.jpeg';
 import imgJuanQuadro from '../assets/fotos_diversas/imgJuanQuadro.jpeg';
 import imgFestival from '../assets/fotos_diversas/festival.jpg';
+import imgHardware from '../assets/fotos_diversas/hardware.jpg';
 
 export const postData = [
   {
@@ -108,5 +109,34 @@ export const postData = [
               Os sistemas adicionais, como a recolha de dados para a organização do festival, passarão para segundo plano, servindo como complementos futuros. O objetivo agora é provar que conseguimos proteger as pessoas.
 
               Neste momento, estamos a preparar a nossa apresentação intermédia (o Pitch Deck) e a afinar a estratégia de marketing para o Eletroday, tivemos a ideia de ter sorteios e surpresas para quem visitar a nossa banca.` 
+  },
+  {
+      id: "7",
+      tag: "Hardware",
+      title: "Hardware Fechado e Foco em Salvar Vidas",
+      author: "João Jesus",
+      
+      // 2. Usar a variável da foto (Sem aspas!)
+      authorImage: fotoJesus, 
+      
+      // 3. O Link que vai abrir quando clicarem no teu nome/foto
+      authorLinkedIn: "https://www.linkedin.com/in/joaojesus9000",
+      
+      date: "7 Abril, 2026",
+      image: imgHardware,
+      excerpt:"Redes congestionadas não podem ser obstáculo para salvar vidas. Fechámos a lista de componentes e as encomendas irão começar! Com microcontroladores compactos, comunicação LoRa e alertas visuais, estamos prontos para iniciar a montagem do protótipo SafeBand.",
+      content:`Em grandes eventos, as redes móveis congestionadas atrasam o socorro médico. A SafeBand resolve este problema com uma pulseira inteligente de baixo custo (menos de 20€) que localiza o utilizador e envia alertas de SOS rápidos, sem depender de Wi-Fi ou 4G.
+
+              Esta semana marcámos um ponto de viragem decisivo: fechámos a nossa lista de materiais para o protótipo final (3 pulseiras, 6 beacons e 1 torre central). Já vamos avançar com as encomendas na Mauser e noutros fornecedores especializados, cumprindo rigorosamente o nosso orçamento!
+
+              O hardware encomendado garante as três pilares da nossa solução:
+
+              - Comunicação Independente: Microcontroladores ultra-compactos combinam a tecnologia BLE (para criar um "GPS de interior" por zonas) e LoRa (para enviar o SOS a longa distância, contornando as redes móveis).
+
+              - Resgate Visual e Tátil: LEDs de alto brilho e micro motores de vibração garantem que a equipa médica encontra a vítima rapidamente, mesmo no meio da multidão e no escuro.
+
+              - Energia: Baterias Li-Po de 500mAh otimizadas para assegurar horas de autonomia ininterrupta.
+
+              O planeamento está feito e as peças estão a caminho. O próximo passo é ligar os ferros de soldar e começar a montagem física do sistema!` 
   }
 ];
