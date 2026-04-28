@@ -13,6 +13,7 @@ import fotodivisaotarefas from '../assets/fotos_diversas/divisaotarefas.jpeg';
 import imgJuanQuadro from '../assets/fotos_diversas/imgJuanQuadro.jpeg';
 import imgFestival from '../assets/fotos_diversas/festival.jpg';
 import imgHardware from '../assets/fotos_diversas/hardware.jpg';
+import imgEletrical from '../assets/fotos_diversas/eletrical.jpg';
 
 export const postData = [
   {
@@ -138,5 +139,32 @@ export const postData = [
               - Energia: Baterias Li-Po de 500mAh otimizadas para assegurar horas de autonomia ininterrupta.
 
               O planeamento está feito e as peças estão a caminho. O próximo passo é ligar os ferros de soldar e começar a montagem física do sistema!` 
+  },
+{
+      id: "8",
+      tag: "Entrega",
+      title: "Sobrevivemos ao Pitch e... O Nosso Hardware Chegou!",
+      author: "João Jesus",
+      
+      // 2. Usar a variável da foto (Sem aspas!)
+      authorImage: fotoJesus, 
+      
+      // 3. O Link que vai abrir quando clicarem no teu nome/foto
+      authorLinkedIn: "https://www.linkedin.com/in/joaojesus9000",
+      
+      date: "28 Abril, 2026",
+      image: imgEletrical,
+      excerpt:"Depois de uma apresentação intermédia de sucesso, onde mostrámos o impacto real da SafeBand em emergências médicas, recebemos a melhor notícia possível: o nosso hardware chegou! Com os microcontroladores, antenas LoRa e componentes visuais nas nossas mãos, a fase teórica termina hoje. É hora de aquecer os ferros de soldar e dar vida ao protótipo.",
+      content:`Esta última semana foi, sem dúvida, uma das mais intensas e recompensadoras para a equipa SafeBand. Tivemos a nossa apresentação intermédia (o famoso Pitch Deck) e a estratégia não podia ter corrido melhor.
+
+              Focámo-nos naquilo que realmente importa: o impacto humano. Explicámos como um telemóvel de última geração se transforma num autêntico pisa-papéis no meio de um festival congestionado e como cada minuto perdido à procura de rede reduz drasticamente as hipóteses de sobrevivência numa emergência médica. A mensagem de que a SafeBand cria uma "via verde" de comunicação, contornando o 4G e o Wi-Fi, passou de forma clara e forte!
+
+              Mas a melhor notícia da semana não veio da sala de apresentações, veio do correio. As nossas encomendas chegaram!
+
+              Os componentes que planeámos ao milímetro para não ultrapassar o orçamento estão finalmente nas nossas mãos.
+
+              A fase do papel e dos diagramas terminou oficialmente. O nosso próximo passo? Ligar os ferros de soldar, montar os primeiros circuitos nas breadboards e testar se os nossos botões de SOS e luzes ganham vida conforme planeado.
+
+              A contagem decrescente para os testes no terreno e para o Eletroday já começou. Mãos à obra!` 
   }
 ];
