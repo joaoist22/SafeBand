@@ -14,6 +14,7 @@ import imgJuanQuadro from '../assets/fotos_diversas/imgJuanQuadro.jpeg';
 import imgFestival from '../assets/fotos_diversas/festival.jpg';
 import imgHardware from '../assets/fotos_diversas/hardware.jpg';
 import imgEletrical from '../assets/fotos_diversas/eletrical.jpg';
+import imgPrototipo from '../assets/fotos_diversas/prototipo.jpg';
 
 export const postData = [
   {
@@ -140,31 +141,60 @@ export const postData = [
 
               O planeamento está feito e as peças estão a caminho. O próximo passo é ligar os ferros de soldar e começar a montagem física do sistema!` 
   },
-{
-      id: "8",
-      tag: "Entrega",
-      title: "Sobrevivemos ao Pitch e... O Nosso Hardware Chegou!",
-      author: "João Jesus",
-      
-      // 2. Usar a variável da foto (Sem aspas!)
-      authorImage: fotoJesus, 
-      
-      // 3. O Link que vai abrir quando clicarem no teu nome/foto
-      authorLinkedIn: "https://www.linkedin.com/in/joaojesus9000",
-      
-      date: "28 Abril, 2026",
-      image: imgEletrical,
-      excerpt:"Depois de uma apresentação intermédia de sucesso, onde mostrámos o impacto real da SafeBand em emergências médicas, recebemos a melhor notícia possível: o nosso hardware chegou! Com os microcontroladores, antenas LoRa e componentes visuais nas nossas mãos, a fase teórica termina hoje. É hora de aquecer os ferros de soldar e dar vida ao protótipo.",
-      content:`Esta última semana foi, sem dúvida, uma das mais intensas e recompensadoras para a equipa SafeBand. Tivemos a nossa apresentação intermédia (o famoso Pitch Deck) e a estratégia não podia ter corrido melhor.
+  {
+        id: "8",
+        tag: "Entrega",
+        title: "Sobrevivemos ao Pitch e... O Nosso Hardware Chegou!",
+        author: "João Jesus",
+        
+        // 2. Usar a variável da foto (Sem aspas!)
+        authorImage: fotoJesus, 
+        
+        // 3. O Link que vai abrir quando clicarem no teu nome/foto
+        authorLinkedIn: "https://www.linkedin.com/in/joaojesus9000",
+        
+        date: "28 Abril, 2026",
+        image: imgEletrical,
+        excerpt:"Depois de uma apresentação intermédia de sucesso, onde mostrámos o impacto real da SafeBand em emergências médicas, recebemos a melhor notícia possível: o nosso hardware chegou! Com os microcontroladores, antenas LoRa e componentes visuais nas nossas mãos, a fase teórica termina hoje. É hora de aquecer os ferros de soldar e dar vida ao protótipo.",
+        content:`Esta última semana foi, sem dúvida, uma das mais intensas e recompensadoras para a equipa SafeBand. Tivemos a nossa apresentação intermédia (o famoso Pitch Deck) e a estratégia não podia ter corrido melhor.
 
-              Focámo-nos naquilo que realmente importa: o impacto humano. Explicámos como um telemóvel de última geração se transforma num autêntico pisa-papéis no meio de um festival congestionado e como cada minuto perdido à procura de rede reduz drasticamente as hipóteses de sobrevivência numa emergência médica. A mensagem de que a SafeBand cria uma "via verde" de comunicação, contornando o 4G e o Wi-Fi, passou de forma clara e forte!
+                Focámo-nos naquilo que realmente importa: o impacto humano. Explicámos como um telemóvel de última geração se transforma num autêntico pisa-papéis no meio de um festival congestionado e como cada minuto perdido à procura de rede reduz drasticamente as hipóteses de sobrevivência numa emergência médica. A mensagem de que a SafeBand cria uma "via verde" de comunicação, contornando o 4G e o Wi-Fi, passou de forma clara e forte!
 
-              Mas a melhor notícia da semana não veio da sala de apresentações, veio do correio. As nossas encomendas chegaram!
+                Mas a melhor notícia da semana não veio da sala de apresentações, veio do correio. As nossas encomendas chegaram!
 
-              Os componentes que planeámos ao milímetro para não ultrapassar o orçamento estão finalmente nas nossas mãos.
+                Os componentes que planeámos ao milímetro para não ultrapassar o orçamento estão finalmente nas nossas mãos.
 
-              A fase do papel e dos diagramas terminou oficialmente. O nosso próximo passo? Ligar os ferros de soldar, montar os primeiros circuitos nas breadboards e testar se os nossos botões de SOS e luzes ganham vida conforme planeado.
+                A fase do papel e dos diagramas terminou oficialmente. O nosso próximo passo? Ligar os ferros de soldar, montar os primeiros circuitos nas breadboards e testar se os nossos botões de SOS e luzes ganham vida conforme planeado.
 
-              A contagem decrescente para os testes no terreno e para o Eletroday já começou. Mãos à obra!` 
-  }
+                A contagem decrescente para os testes no terreno e para o Eletroday já começou. Mãos à obra!` 
+    },
+    {
+        id: "9",
+        tag: "Protótipo",
+        title: "O Protótipo Ganha Vida (e o Público Aprova!)",
+        author: "João Jesus",
+        
+        // 2. Usar a variável da foto (Sem aspas!)
+        authorImage: fotoJesus, 
+        
+        // 3. O Link que vai abrir quando clicarem no teu nome/foto
+        authorLinkedIn: "https://www.linkedin.com/in/joaojesus9000",
+        
+        date: "14 Maio, 2026",
+        image: imgPrototipo,
+        excerpt:"O protótipo da SafeBand ganhou vida! Conseguimos ntestar com sucesso o envio de alertas SOS via LoRa a partir da nossa breadboard. Em paralelo, recolhemos mais de 80 opiniões num inquérito público que validam a necessidade do nosso sistema no mercado.",
+        content:`Se as últimas semanas foram de planeamento, esta semana foi de pura ação. A equipa SafeBand dividiu-se em três frentes de ataque e os resultados superaram as nossas próprias expectativas: o nosso hardware já não é apenas uma ideia, está vivo e a comunicar!
+
+                1. O "Cérebro" a Funcionar (Hardware & Comunicação)
+                O nosso sistema base está a correr na perfeição nas nossas breadboards. Conseguimos provar a nossa maior inovação de engenharia: o processamento local (Edge Computing). O nosso microcontrolador já consegue fazer o scan do recinto, calcular a média da força do sinal (RSSI) e estimar a sua própria zona automaticamente, poupando imensa energia.
+                E o mais importante? O botão de emergência funciona. Quando ativado, o sistema entra em modo SOS, aciona o motor de vibração para dar feedback ao utilizador e dispara o alerta via comunicação LoRa.
+
+                2. O Software e a Pulseira Física
+                Enquanto o código da rede fica fechado, a nossa equipa de software está a desenvolver a interface (Frontend e Backend) da aplicação que as equipas médicas vão usar para visualizar os alertas. Em paralelo, estamos a finalizar a montagem física de um protótipo "usável" porque queremos entregar algo altamente visual e ergonómico para a nossa orientação analisar.
+
+                3. A Voz do Público
+                Nós não queremos construir tecnologia fechados num quarto; queremos resolver problemas reais. Por isso, lançámos um inquérito ao público e obtivemos mais de 80 respostas! Quisemos saber com que frequência vão a festivais, se estariam dispostos a usar uma pulseira extra, como gostariam de a receber e qual a sua abertura para partilhar informações vitais (como alergias ou tipo sanguíneo) com equipas médicas.
+
+                Os dados que recolhemos validam a nossa missão e dão-nos uma base sólida para o futuro do projeto. O público quer sentir-se seguro, e a SafeBand está cada vez mais perto de garantir exatamente isso.` 
+    }
 ];
