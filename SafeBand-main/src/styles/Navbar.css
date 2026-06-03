@@ -1,0 +1,165 @@
+/* =========================================
+   ESTILOS GERAIS E PC (O teu código original)
+========================================= */
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 50px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.pulse-svg { width: 80px; height: 40px; }
+.pulse-path {
+  fill: none; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round;
+  stroke-dasharray: 120; stroke-dashoffset: 120;
+  animation: heartbeat 2.5s infinite linear;
+  transition: stroke 0.5s ease;
+}
+
+@keyframes heartbeat {
+  0% { stroke-dashoffset: 120; opacity: 0; }
+  10% { opacity: 1; }
+  50% { stroke-dashoffset: 0; }
+  90% { opacity: 1; }
+  100% { stroke-dashoffset: -120; opacity: 0; }
+}
+
+/* O contentor que envolve links e controlos no PC */
+.navbar-content {
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 25px;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: #555;
+  font-weight: 600;
+  font-size: 15px;
+  transition: color 0.3s ease;
+}
+
+.navbar-links a:hover,
+.navbar-links a.active { color: #57cbcc; }
+
+.navbar-controls {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.control-btn {
+  display: flex; align-items: center; gap: 5px;
+  background: none; border: none; cursor: pointer;
+  font-weight: 600; color: #555;
+}
+
+.theme-toggle { display: flex; align-items: center; gap: 10px; }
+.switch {
+  width: 46px; height: 24px; background-color: #ccc;
+  border-radius: 20px; position: relative; cursor: pointer;
+}
+.switch-knob {
+  width: 20px; height: 20px; background-color: white;
+  border-radius: 50%; position: absolute; top: 2px; left: 2px;
+  transition: all 0.3s ease;
+}
+
+/* --- MODO ESCURO NA NAVBAR --- */
+.navbar-container.dark-mode {
+  background-color: #1a1c23; border-bottom: 1px solid #2d313a;
+}
+.navbar-container.dark-mode .navbar-links a,
+.navbar-container.dark-mode .control-btn { color: #e2e8f0; }
+.navbar-container.dark-mode .navbar-links a:hover,
+.navbar-container.dark-mode .navbar-links a.active { color: #57cbcc; }
+.switch.dark-active { background-color: #57cbcc; }
+.switch.dark-active .switch-knob {
+  transform: translateX(22px); background-color: #1a1c23;
+}
+
+/* Por defeito, no PC, esconde o botão hambúrguer */
+.hamburger-btn { display: none; }
+
+/* =========================================
+   COMPORTAMENTO MOBILE (Até 768px)
+========================================= */
+@media (max-width: 768px) {
+  
+  .navbar-container {
+    padding: 15px 20px; /* Reduz o padding lateral no telemóvel */
+  }
+
+  /* 1. Mostra o Botão Hambúrguer */
+  .hamburger-btn {
+    display: block;
+    background: none;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    z-index: 1001; /* Fica acima da gaveta para poderes fechar */
+  }
+
+  /* 2. Transforma a navbar-content numa Gaveta Lateral */
+  .navbar-content {
+    position: fixed;
+    top: 0;
+    right: -100%; /* Começa escondida à direita */
+    width: 250px;
+    height: 100vh;
+    background-color: #ffffff;
+    flex-direction: column; /* Coloca os links uns por cima dos outros */
+    align-items: flex-start;
+    padding: 80px 30px;
+    gap: 30px;
+    transition: right 0.4s ease-in-out; /* Animação suave a entrar */
+    box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+    z-index: 1000;
+  }
+
+  /* Gaveta escura no Dark Mode */
+  .navbar-container.dark-mode .navbar-content {
+    background-color: #1a1c23;
+  }
+
+  /* 3. Quando clicas, a gaveta entra no ecrã */
+  .navbar-content.open {
+    right: 0;
+  }
+
+  /* 4. Ajustes nos links e controlos dentro da gaveta */
+  .navbar-links {
+    flex-direction: column;
+    gap: 25px;
+    width: 100%;
+  }
+
+  .navbar-links a { font-size: 1.2rem; }
+
+  .navbar-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 25px;
+    border-top: 1px solid #eee; /* Linha a separar */
+    padding-top: 30px;
+    width: 100%;
+  }
+
+  .navbar-container.dark-mode .navbar-controls { border-top-color: #333; }
+}

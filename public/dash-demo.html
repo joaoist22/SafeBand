@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeBand | Central Médica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@500;700&display=swap');
+        body { font-family: 'Inter', sans-serif; background-color: #0f172a; }
+        @keyframes pulse-emergency {
+            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .emergency-active { border: 2px solid #ef4444; animation: pulse-emergency 1.5s infinite; }
+        #map { height: 100%; width: 100%; background: #e5e7eb; }
+        .marker-blue { background-color: #2563eb; border: 2px solid white; border-radius: 50%; width: 14px; height: 14px; box-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .marker-red-sos { background-color: #ef4444; border: 2px solid white; border-radius: 50%; width: 22px; height: 22px; animation: pulse-emergency 1s infinite; z-index: 1000 !important; box-shadow: 0 0 10px rgba(239,68,68,0.5); }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+    </style>
+</head>
+<body class="h-screen flex overflow-hidden text-slate-200">
+
+    <div class="w-[60%] h-full relative">
+        <div id="map"></div>
+    </div>
+
+    <div class="w-[40%] h-full flex flex-col border-l border-slate-800 bg-slate-900 shadow-inner">
+        
+        <div class="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-900 z-10">
+            <div>
+                <h2 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">LoRa Gateway</h2>
+                <p class="text-xl font-semibold text-white">Central de Triagem</p>
+            </div>
+            <div class="text-xs bg-slate-800 text-green-400 font-mono px-3 py-1 rounded border border-slate-700">Online</div>
+        </div>
+
+        <div class="flex-grow overflow-y-auto p-4 relative" id="feed-container">
+            
+            <div id="estado-calmo" class="flex flex-col items-center justify-center h-full text-center opacity-60">
+                <svg class="w-16 h-16 text-slate-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <p class="text-lg font-bold">Sem Ocorrências Ativas</p>
+                <p class="text-xs text-slate-500">A escutar rede LoRa...</p>
+            </div>
+
+            <div id="alerta-sos" class="emergency-active bg-slate-800 rounded-xl p-5 relative overflow-hidden hidden">
+                <div class="flex justify-between items-start mb-4">
+                    <div>
+                        <span id="badge-tipo" class="inline-block px-2 py-0.5 rounded bg-red-500 text-[10px] font-black text-white uppercase mb-2 animate-pulse">ALERTA SOS</span>
+                        <h3 id="dash-id" class="text-2xl font-bold text-white font-mono">ID: --</h3>
+                        <p id="dash-hora" class="text-xs text-slate-400 mt-1"></p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 p-3 rounded-lg border border-slate-700 mb-4">
+                    <p class="text-[9px] text-slate-500 uppercase tracking-widest mb-2 border-b border-slate-800 pb-1">Identidade App</p>
+                    <div class="flex items-center gap-3 mb-3 mt-2">
+                        <div class="w-10 h-10 rounded-full bg-slate-700 border border-slate-500 flex items-center justify-center text-white font-bold">👤</div>
+                        <h4 id="dash-nome" class="text-sm font-bold text-white">--</h4>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div class="bg-red-950/40 p-2 rounded border border-red-900/50">
+                            <span class="block text-[9px] text-slate-500 uppercase">Sangue</span>
+                            <span id="dash-sangue" class="font-bold text-red-400">--</span>
+                        </div>
+                        <div class="bg-red-950/40 p-2 rounded border border-red-900/50">
+                            <span class="block text-[9px] text-slate-500 uppercase">Alergias</span>
+                            <span id="dash-alergias" class="font-bold text-red-400">--</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-red-950/20 p-3 rounded-lg border border-red-500/20 mb-4">
+                    <p class="text-[9px] text-red-500 uppercase tracking-widest mb-1">Detalhes (Opcional)</p>
+                    <p id="dash-info" class="text-sm font-bold text-white">--</p>
+                </div>
+
+                <div class="bg-slate-950 p-3 rounded-lg border border-red-500/30 mb-5">
+                    <p class="text-[9px] text-slate-500 uppercase font-bold tracking-widest">Localização (BLE Edge)</p>
+                    <span id="dash-zona" class="text-sm font-semibold text-red-400">--</span>
+                </div>
+
+                <button id="btn-resolver" onclick="resolverSOS()" class="w-full bg-red-600 text-white font-black py-4 rounded-xl uppercase shadow-[0_0_15px_rgba(239,68,68,0.4)] active:scale-95 text-sm transition-colors">
+                    Marcar como Resolvido
+                </button>
+            </div>
+        </div>
+
+        <div class="h-1/3 min-h-[220px] border-t border-slate-800 bg-slate-950 p-4 flex flex-col shadow-[0_-10px_20px_rgba(0,0,0,0.3)] z-10">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center gap-2">
+                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                    Registo de Ocorrências
+                </h3>
+            </div>
+            <div id="logs-list" class="flex-grow overflow-y-auto space-y-2 custom-scrollbar pr-2 font-mono text-xs">
+                <div id="empty-log" class="text-slate-600 italic mt-2 text-center text-[10px]">Nenhum registo gravado.</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        const map = L.map('map', { center: [38.7368, -9.1386], zoom: 18, zoomControl: false });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+        const createBlueIcon = () => L.divIcon({ className: 'marker-blue' });
+        const createRedSOSIcon = () => L.divIcon({ className: 'marker-red-sos' });
+
+        L.marker([38.7360506, -9.1379303], { icon: createBlueIcon() }).addTo(map).bindPopup("Equipa Alpha");
+
+        let sosMarker = null;
+        let lastTimestamp = null;
+        let incidentHistory = {}; // A MEMÓRIA DOS LOGS
+        let currentActiveTimestamp = null; // Guarda o ID do alerta que está aberto no ecrã
+
+        setInterval(function() {
+            const dataStr = localStorage.getItem('safeband_sos_ativo');
+            if (dataStr) {
+                const dados = JSON.parse(dataStr);
+                if (dados.timestamp !== lastTimestamp) {
+                    ativarAlertaNoDashboard(dados, true); // true = é um alerta NOVO
+                    lastTimestamp = dados.timestamp;
+                }
+            }
+        }, 1000);
+
+        function ativarAlertaNoDashboard(dados, isNewEvent = false) {
+            currentActiveTimestamp = dados.timestamp;
+
+            if (isNewEvent) {
+                incidentHistory[dados.timestamp] = dados;
+                adicionarLogHTML(dados);
+                document.getElementById('alerta-sos').classList.add('emergency-active');
+                document.getElementById('alerta-sos').classList.replace('border-slate-600', 'border-red-500');
+                document.getElementById('badge-tipo').innerText = "ALERTA SOS";
+                document.getElementById('badge-tipo').classList.replace('bg-slate-500', 'bg-red-500');
+                document.getElementById('badge-tipo').classList.add('animate-pulse');
+                document.getElementById('btn-resolver').classList.remove('hidden');
+            }
+
+            document.getElementById('estado-calmo').classList.add('hidden');
+            document.getElementById('alerta-sos').classList.remove('hidden');
+
+            const horaFormato = new Date(dados.timestamp).toLocaleTimeString('pt-PT');
+            document.getElementById('dash-id').innerText = "ID: " + dados.id;
+            document.getElementById('dash-hora').innerText = "Recebido às: " + horaFormato;
+            document.getElementById('dash-nome').innerText = dados.nome;
+            document.getElementById('dash-sangue').innerText = dados.sangue;
+            document.getElementById('dash-alergias').innerText = dados.alergias;
+            document.getElementById('dash-info').innerText = dados.info;
+            document.getElementById('dash-zona').innerText = dados.zona;
+
+            if(sosMarker) map.removeLayer(sosMarker);
+            sosMarker = L.marker([38.7368, -9.1386], { icon: createRedSOSIcon(), zIndexOffset: 1000 }).addTo(map)
+                .bindPopup(`<b>${dados.id}</b><br>Hora: ${horaFormato}`).openPopup();
+        }
+
+        function adicionarLogHTML(dados) {
+            const emptyLogMsg = document.getElementById('empty-log');
+            if(emptyLogMsg) emptyLogMsg.style.display = 'none';
+            const hora = new Date(dados.timestamp).toLocaleTimeString('pt-PT');
+            
+            // Log clicável. Quando clicas, chama a função verHistorico()
+            const logItem = `
+                <div id="log-${dados.timestamp}" onclick="verHistorico(${dados.timestamp})" class="cursor-pointer hover:bg-slate-800 transition-colors bg-slate-900 border-l-2 border-red-500 p-2.5 rounded-r border border-y-slate-800 border-r-slate-800 shadow-sm mb-2">
+                    <div class="flex justify-between items-start mb-1">
+                        <span class="text-[10px] text-slate-500">[${hora}] INBOUND</span>
+                        <span id="log-status-${dados.timestamp}" class="text-red-400 font-bold">${dados.id}</span>
+                    </div>
+                    <p class="text-slate-300 text-[11px]"><span class="text-slate-500">Local:</span> ${dados.zona}</p>
+                </div>
+            `;
+            document.getElementById('logs-list').insertAdjacentHTML('afterbegin', logItem);
+        }
+
+        // FUNÇÃO PARA VER O HISTÓRICO QUANDO CLICAS NUM LOG
+        function verHistorico(timestamp) {
+            const dados = incidentHistory[timestamp];
+            if(!dados) return;
+            
+            // Carrega os dados para o ecrã
+            ativarAlertaNoDashboard(dados, false); // false = não é um evento novo, é só visualização
+
+            // Como é histórico, muda o design para não parecer uma emergência ativa
+            document.getElementById('alerta-sos').classList.remove('emergency-active');
+            document.getElementById('alerta-sos').classList.add('border', 'border-slate-600');
+            document.getElementById('badge-tipo').innerText = "VISUALIZAÇÃO DE HISTÓRICO";
+            document.getElementById('badge-tipo').classList.replace('bg-red-500', 'bg-slate-500');
+            document.getElementById('badge-tipo').classList.remove('animate-pulse');
+            
+            // Esconde o botão de resolver se já estiver resolvido no log (se a borda for verde)
+            const logDiv = document.getElementById(`log-${timestamp}`);
+            if(logDiv && logDiv.classList.contains('border-green-500')) {
+                document.getElementById('btn-resolver').classList.add('hidden');
+            } else {
+                document.getElementById('btn-resolver').classList.remove('hidden');
+            }
+        }
+
+        function resolverSOS() {
+            if(!currentActiveTimestamp) return;
+
+            // 1. Limpa o ecrã principal
+            document.getElementById('alerta-sos').classList.add('hidden');
+            document.getElementById('estado-calmo').classList.remove('hidden');
+            if(sosMarker) map.removeLayer(sosMarker);
+            localStorage.removeItem('safeband_sos_ativo');
+            
+            // 2. MAGIA: Edita o Log vermelho e transforma-o em verde!
+            const logDiv = document.getElementById(`log-${currentActiveTimestamp}`);
+            if(logDiv) {
+                logDiv.classList.replace('border-red-500', 'border-green-500');
+                const statusSpan = document.getElementById(`log-status-${currentActiveTimestamp}`);
+                
+                // Mantém o ID e adiciona a tag [RESOLVIDO]
+                const idOriginal = incidentHistory[currentActiveTimestamp].id;
+                statusSpan.innerHTML = `${idOriginal} <span class="text-green-500 ml-2 text-[10px] uppercase">[Resolvido]</span>`;
+                statusSpan.classList.replace('text-red-400', 'text-slate-400');
+            }
+
+            currentActiveTimestamp = null;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+.css-phone-chassis {
+  width: 100%; /* O tamanho será controlado pelo Hero.css */
+  aspect-ratio: 9 / 19; /* Proporção exata de um smartphone moderno */
+  background-color: #1a1c23; /* Cor da borda do telemóvel */
+  border-radius: 40px;
+  padding: 12px; /* Espessura da borda preta */
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  position: relative;
+  box-sizing: border-box;
+}
+
+.css-phone-notch {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 25px;
+  background-color: #1a1c23;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  z-index: 10;
+}
+
+.css-phone-screen {
+  width: 100%;
+  height: 100%;
+  background-color: #fff; /* Fundo branco caso a imagem demore a carregar */
+  border-radius: 30px;
+  overflow: hidden; /* Corta a imagem da app para seguir os cantos redondos */
+  position: relative;
+}
+
+.css-app-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Preenche o ecrã todo na perfeição */
+  display: block;
+}

@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeBand | App Utilizador Final</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+        body { font-family: 'Inter', sans-serif; transition: background-color 0.3s; margin: 0; padding: 0; overflow: hidden; background: transparent; }
+        .leaflet-container { z-index: 10 !important; font-family: 'Inter', sans-serif;}
+        
+        /* Tema Escuro Dinâmico */
+        .dark-mode { background-color: #0f172a !important; color: white; }
+        .dark-mode .bg-white { background-color: #1e293b !important; color: white; }
+        .dark-mode .text-slate-900 { color: #f8fafc !important; }
+        .dark-mode .bg-slate-50 { background-color: #0f172a !important; color: white; border-color: #334155; }
+        .dark-mode .border-slate-200 { border-color: #334155 !important; }
+        .dark-mode .text-slate-500 { color: #94a3b8 !important; }
+        
+        /* Drawer e Modais */
+        #sideMenu { transform: translateX(-100%); transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        #sideMenu.open { transform: translateX(0); }
+        .phone-modal { position: absolute !important; inset: 0; z-index: 600; }
+        
+        #map-container { height: 100%; width: 100%; border-radius: 0px; overflow: hidden; position: relative; z-index: 10;}
+        
+        /* Scrollbar escondida para parecer app nativa */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+        
+        .chip { transition: all 0.2s; }
+        .chip.active { background-color: #dc2626 !important; border-color: #dc2626 !important; color: white !important; }
+        .chip.active-med { background-color: #fca5a5 !important; border-color: #ef4444 !important; color: #7f1d1d !important; }
+    </style>
+</head>
+<body class="h-screen w-full flex items-center justify-center bg-transparent">
+
+    <div id="phone-frame" class="w-full h-full bg-slate-50 relative overflow-hidden flex flex-col transition-colors">
+        
+        <div id="loginScreen" class="absolute inset-0 z-[500] bg-white flex flex-col p-8 transition-opacity duration-500 overflow-y-auto">
+            <div class="flex-1 flex flex-col justify-center mt-10">
+                <div class="w-20 h-20 bg-red-600 rounded-[22px] mx-auto mb-6 flex items-center justify-center shadow-[0_10px_16px_rgba(220,38,38,0.35)]">
+                    <svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                </div>
+                <h1 class="text-[32px] font-black text-slate-900 text-center mb-2 leading-tight">Bem-vindo à<br><span class="text-red-600">SafeBand</span></h1>
+                <p class="text-center text-slate-500 text-sm mb-8 font-medium">A tua segurança a um toque de distância.</p>
+
+                <div class="space-y-3 mb-2">
+                    <input type="email" placeholder="Endereço de E-mail" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-sm font-semibold outline-none text-slate-900 focus:border-slate-400">
+                    <input type="password" placeholder="Palavra-passe" class="w-full bg-slate-50 border border-slate-200 rounded-2xl p-4 text-sm font-semibold outline-none text-slate-900 focus:border-slate-400">
+                </div>
+                
+                <div class="text-right mb-8"><a href="#" class="text-xs font-bold text-red-600 tracking-wide">Esqueceu-se da palavra-passe?</a></div>
+
+                <button onclick="doLogin()" class="w-full bg-slate-900 text-white font-black py-4 rounded-2xl shadow-[0_6px_12px_rgba(0,0,0,0.2)] active:scale-95 transition-transform tracking-widest text-[13px] uppercase">
+                    Iniciar Sessão
+                </button>
+                <p class="text-center text-slate-400 text-xs font-bold mt-6">Não tem conta? <span class="text-red-600">Registe-se</span></p>
+            </div>
+        </div>
+
+        <div id="onboardingScreen" class="absolute inset-0 z-[400] bg-white flex flex-col transition-opacity duration-500 opacity-0 pointer-events-none">
+            <div class="pt-6 px-6">
+                <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                    <div id="ob-progress" class="bg-red-600 h-full transition-all duration-500 ease-out" style="width: 33%"></div>
+                </div>
+            </div>
+
+            <div id="ob-step-1" class="flex-1 flex flex-col p-8 overflow-y-auto transition-all duration-300">
+                <div class="flex-1">
+                    <h2 class="text-[32px] font-black text-slate-900 mb-2 leading-tight mt-4">Qual é o teu<br><span class="text-red-600">nome?</span></h2>
+                    <p class="text-slate-500 text-sm mb-8 leading-relaxed">Precisamos de alguns dados básicos para o teu perfil.</p>
+                    
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-[2px]">Nome Completo</label>
+                    <input id="ob-name-input" type="text" placeholder="Ex: João Ferreira" value="João Ferreira" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 text-[15px] font-bold outline-none text-slate-900 mb-5">
+                    
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-[2px]">Data de Nascimento</label>
+                    <input type="date" value="2004-05-15" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 text-[15px] font-bold outline-none text-slate-900 mb-5">
+                </div>
+                <button onclick="nextStep(2)" class="w-full bg-red-600 text-white font-black py-4.5 rounded-2xl shadow-[0_8px_16px_rgba(220,38,38,0.3)] active:scale-95 transition-transform tracking-[2px] text-[13px] h-14 mb-4 uppercase">Continuar</button>
+            </div>
+
+            <div id="ob-step-2" class="flex-1 flex flex-col p-8 hidden overflow-y-auto transition-all duration-300">
+                <div class="flex-1 mt-4">
+                    <div class="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-5">
+                        <svg class="w-9 h-9 text-blue-500" fill="currentColor" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    </div>
+                    <h2 class="text-[32px] font-black text-slate-900 mb-2 leading-tight">Sincronizar Saúde</h2>
+                    <p class="text-slate-500 text-sm mb-8 leading-relaxed">Conecta a tua App de Saúde para preencher automaticamente os dados vitais.</p>
+                    
+                    <button onclick="nextStep(3)" class="w-full bg-slate-900 text-white font-black py-4 rounded-2xl shadow-[0_6px_12px_rgba(0,0,0,0.2)] active:scale-95 transition-transform tracking-widest text-[13px] mb-3 uppercase">Ligar Apple Health / Google Fit</button>
+                    <button onclick="nextStep(3)" class="w-full bg-slate-100 text-slate-500 font-bold py-4 rounded-2xl active:scale-95 transition-transform text-sm hover:bg-slate-200">Ignorar / Preencher Manualmente</button>
+                </div>
+            </div>
+
+            <div id="ob-step-3" class="flex-1 flex flex-col p-8 hidden overflow-y-auto transition-all duration-300">
+                <div class="flex-1 mt-2">
+                    <h2 class="text-[32px] font-black text-slate-900 mb-6 leading-tight">Ficha Clínica</h2>
+                    
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-[2px]">Tipo Sanguíneo</label>
+                    <div id="blood-grid" class="flex flex-wrap gap-2 mb-4"></div>
+
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-[2px] mt-4">Alergias Comuns</label>
+                    <div id="allergies-grid" class="flex flex-wrap gap-2 mb-4"></div>
+
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-[2px] mt-4">Outra Alergia (Opcional)</label>
+                    <input id="custom-allergy" type="text" placeholder="Escreve aqui..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 text-[15px] font-bold outline-none text-slate-900 mb-2">
+
+                    <div id="meds-container" class="hidden mt-4 p-4 bg-red-50 rounded-2xl border border-red-200 mb-6">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-[2px]">Medicação Sugerida</label>
+                        <div id="meds-grid" class="flex flex-wrap gap-2 mb-4"></div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-[2px] mt-3">Outra Medicação</label>
+                        <input id="custom-med" type="text" placeholder="Ex: Ventilan..." class="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 text-[14px] font-bold outline-none text-slate-900">
+                    </div>
+                </div>
+                <button onclick="finishOnboarding()" class="w-full bg-red-600 text-white font-black py-4.5 rounded-2xl shadow-[0_8px_16px_rgba(220,38,38,0.3)] active:scale-95 transition-transform tracking-[2px] text-[13px] h-14 mt-4 mb-4 uppercase">Entrar na SafeBand</button>
+            </div>
+        </div>
+
+        <div class="pt-6 px-5 pb-3 flex justify-between items-center bg-white z-40 border-b border-slate-100 relative">
+            <button onclick="toggleMenu()" class="p-2 -ml-2 text-slate-900">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+            <span class="font-black text-lg tracking-tight text-slate-900">SafeBand</span>
+            <div id="header-avatar" class="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center text-white font-bold text-sm">JF</div>
+        </div>
+
+        <div class="flex px-4 py-3 bg-white gap-2 z-40 relative shadow-sm">
+            <button onclick="showTab('perfil')" id="btn-perfil" class="tab-btn flex-1 py-2.5 rounded-full text-[10px] tracking-wide font-black transition-all bg-red-600 text-white shadow-[0_4px_8px_rgba(220,38,38,0.3)] uppercase">Perfil</button>
+            <button onclick="showTab('bilhete')" id="btn-bilhete" class="tab-btn flex-1 py-2.5 rounded-full text-[10px] tracking-wide font-black transition-all bg-slate-50 text-slate-400 uppercase">Bilhete</button>
+            <button onclick="showTab('mapa')" id="btn-mapa" class="tab-btn flex-1 py-2.5 rounded-full text-[10px] tracking-wide font-black transition-all bg-slate-50 text-slate-400 uppercase">Mapa</button>
+        </div>
+
+        <div id="perfil" class="tab-section flex flex-1 flex-col p-6 overflow-y-auto">
+            <div class="flex flex-col items-center mt-2 mb-6">
+                <div id="profile-img" class="w-28 h-28 rounded-full bg-red-600 border-4 border-white shadow-[0_8px_20px_rgba(220,38,38,0.3)] flex items-center justify-center text-4xl font-black text-white mb-3">JF</div>
+                <h2 id="display-name" class="text-2xl font-black text-slate-900 text-center">João Ferreira</h2>
+                <p id="medical-status" class="text-slate-500 font-medium italic mt-1 text-[13px]">Dados médicos incompletos</p>
+            </div>
+            
+            <button id="complete-btn" onclick="openModal('modalMedical', 'medicalContent')" class="w-full bg-red-600 text-white p-4.5 rounded-2xl shadow-[0_6px_12px_rgba(220,38,38,0.3)] font-black tracking-[1.5px] text-[11px] uppercase mb-5 hidden">
+                Completar Dados Médicos
+            </button>
+
+            <div class="bg-white rounded-[20px] p-5 border border-slate-100 shadow-sm mb-20">
+                <div class="flex justify-between items-center mb-3 text-slate-900">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-[2px]">Hardware</span>
+                    <span id="status-tag" class="text-[10px] font-bold text-red-600 uppercase tracking-[1px]">Desligada</span>
+                </div>
+                <button onclick="startPairing()" id="pair-btn" class="w-full flex flex-col items-center bg-slate-50 border border-slate-200 py-4 rounded-[14px] font-bold text-sm text-slate-700 active:scale-95 transition-transform">
+                    <span>Sincronizar Pulseira (Bluetooth)</span>
+                </button>
+            </div>
+        </div>
+
+        <div id="bilhete" class="tab-section hidden flex-1 flex-col p-6 items-center overflow-y-auto">
+            <div class="w-full bg-white rounded-[24px] border-2 border-dashed border-slate-200 p-8 flex flex-col items-center shadow-sm mt-2">
+                <h3 class="text-red-600 font-black text-[22px] mb-1 uppercase italic">Arraial Técnico</h3>
+                <p class="text-slate-500 font-bold text-[11px] mb-6 uppercase tracking-[2px] text-center">15 Setembro • 18:00</p>
+                <div class="bg-slate-50 p-5 rounded-2xl mb-6">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=SafeBand-IST-JF" class="w-40 h-40">
+                </div>
+                <div class="w-full border-t border-slate-200 pt-4 text-center">
+                    <p class="text-[10px] font-bold text-slate-400 uppercase mb-1 tracking-[2px]">Localização</p>
+                    <p class="font-bold text-[16px] text-slate-900">Alameda do IST</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="mapa" class="tab-section hidden flex-1 flex-col relative bg-slate-50">
+            <div id="map-container">
+                <div id="main-map" class="h-full w-full"></div>
+            </div>
+            <div class="absolute bottom-24 left-4 right-4 bg-white p-4 rounded-2xl shadow-[0_2px_8px_rgba(0,0,0,0.08)] z-20">
+                <p class="text-[10px] font-bold text-slate-900 uppercase mb-2 tracking-[2px]">Legenda</p>
+                <div class="flex flex-col gap-2">
+                    <span class="flex items-center gap-2.5 text-[12px] font-bold text-slate-500">
+                        <div class="w-3 h-3 bg-red-600 rounded-full"></div> Equipa Médica Alpha
+                    </span>
+                    <span class="flex items-center gap-2.5 text-[12px] font-bold text-slate-500">
+                        <div class="w-3 h-3 bg-blue-500 rounded-full"></div> Minha Posição
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <button id="floating-sos-btn" onclick="handleSOSClick()" class="hidden absolute bottom-6 right-6 w-16 h-16 bg-red-600 rounded-full shadow-[0_0_24px_rgba(220,38,38,0.7)] border-2 border-white flex items-center justify-center text-white font-black z-[50] active:scale-90 transition-transform text-[16px]">SOS</button>
+
+        <div id="sideMenu" class="absolute inset-0 z-[650] flex pointer-events-none">
+            <div class="w-[80%] h-full bg-slate-900 p-7 pt-12 text-white shadow-[4px_0_20px_rgba(0,0,0,0.3)] pointer-events-auto flex flex-col">
+                <div class="flex items-center gap-3.5 mb-7 border-b border-slate-800 pb-6">
+                    <div id="menu-avatar" class="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center font-bold text-[18px]">JF</div>
+                    <div>
+                        <p id="menu-name" class="font-bold text-[16px]">João Ferreira</p>
+                        <p class="text-[12px] text-slate-500">Utilizador SafeBand</p>
+                    </div>
+                </div>
+                <nav class="space-y-2">
+                    <button onclick="toggleMenu(); openModal('modalMedical')" class="flex items-center gap-3.5 text-slate-300 hover:text-white w-full text-left py-3.5">
+                        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <span class="font-semibold text-[15px]">Dados Médicos</span>
+                    </button>
+                    <button id="menu-pulseira-btn" onclick="toggleMenu(); startPairing()" class="flex items-center gap-3.5 text-slate-300 hover:text-white w-full text-left py-3.5 transition-all">
+                        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                        <span class="font-semibold text-[15px]">Ligar Pulseira</span>
+                    </button>
+                    <button onclick="toggleMenu(); openModal('modalSettings')" class="flex items-center gap-3.5 text-slate-300 hover:text-white w-full text-left py-3.5">
+                        <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z"></path></svg>
+                        <span class="font-semibold text-[15px]">Definições</span>
+                    </button>
+                </nav>
+            </div>
+            <div class="flex-1 bg-black/45 pointer-events-auto" onclick="toggleMenu()"></div>
+        </div>
+
+        <div id="modalMedical" class="phone-modal bg-black/60 flex-col items-center justify-center p-6 opacity-0 pointer-events-none transition-opacity duration-300 flex overflow-y-auto">
+            <div class="bg-white w-full rounded-[28px] p-6 shadow-[0_16px_32px_rgba(0,0,0,0.25)] transform scale-95 transition-transform duration-300 mt-10 mb-10" id="medicalContent">
+                <h3 class="text-[20px] font-black text-slate-900 mb-5">Editar Ficha Clínica</h3>
+                
+                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-[2px]">Tipo Sanguíneo</label>
+                <div id="edit-blood-grid" class="flex flex-wrap gap-2 mb-4"></div>
+
+                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-[2px] mt-4">Alergias</label>
+                <div id="edit-allergies-grid" class="flex flex-wrap gap-2 mb-4"></div>
+                <input id="edit-custom-allergy" type="text" placeholder="Outras alergias..." class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 text-[15px] font-bold outline-none text-slate-900 mb-2">
+
+                <div id="edit-meds-container" class="hidden mt-4 p-4 bg-red-50 rounded-2xl border border-red-200 mb-6">
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-[2px]">Medicação</label>
+                    <div id="edit-meds-grid" class="flex flex-wrap gap-2 mb-4"></div>
+                    <input id="edit-custom-med" type="text" placeholder="Outros medicamentos..." class="w-full bg-white border border-slate-200 rounded-2xl px-4 py-3 text-[14px] font-bold outline-none text-slate-900">
+                </div>
+                
+                <button onclick="saveMedicalData()" class="w-full bg-red-600 text-white font-black py-4.5 rounded-2xl shadow-[0_8px_16px_rgba(220,38,38,0.3)] active:scale-95 transition-transform tracking-[2px] text-[13px] mt-2 mb-2 uppercase">Guardar Alterações</button>
+                <button onclick="closeModal('modalMedical', 'medicalContent')" class="w-full text-slate-400 text-[14px] font-bold py-3">Cancelar</button>
+            </div>
+        </div>
+
+        <div id="nfcModal" class="phone-modal bg-slate-900/95 flex-col items-center justify-center p-8 text-center opacity-0 pointer-events-none transition-opacity duration-300 flex">
+            <div class="w-24 h-24 mb-5 relative mx-auto">
+                <div class="absolute inset-0 bg-blue-500 rounded-full animate-ping opacity-40"></div>
+                <div class="bg-blue-600 w-full h-full rounded-full flex items-center justify-center relative shadow-[0_0_24px_rgba(37,99,235,0.55)]">
+                    <svg class="w-11 h-11 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A10.003 10.003 0 0012 3c1.288 0 2.514.243 3.64.683m4.163 2.871A10.001 10.001 0 0112 21c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-6.103m9.06 6.047a1 1 0 011.11 1.32l-2.245 5.561"></path></svg>
+                </div>
+            </div>
+            <h4 class="text-white font-black text-[20px] mb-2 tracking-[2px]">A PROCURAR...</h4>
+            <p class="text-blue-300 text-[13px] text-center mb-8">Certifica-te que carregaste no botão de emparelhamento da pulseira.</p>
+            <p class="text-blue-400 text-[10px] font-mono border border-blue-900 bg-blue-900/20 p-2 rounded">Pressione "Z" no teclado para simular sucesso</p>
+            <button onclick="finishPairing(false)" class="mt-8 text-slate-400 text-[14px] font-bold">Cancelar</button>
+        </div>
+
+        <div id="modalPulseira" class="phone-modal flex-col justify-end p-0 bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 flex">
+            <div class="bg-white w-full rounded-t-[28px] p-6 pb-11 shadow-2xl transform translate-y-full transition-transform duration-300" id="pulseiraContent">
+                <div class="w-12 h-1.5 bg-slate-300 rounded-full mx-auto mb-5"></div>
+                <h3 class="text-[20px] font-black text-slate-900 mb-4">A minha SafeBand</h3>
+                <div class="bg-slate-50 p-4 rounded-[14px] mb-5">
+                    <div class="flex justify-between items-center mb-2.5">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-[2px]">Bateria</span>
+                        <span class="text-[16px] font-black text-green-600">98%</span>
+                    </div>
+                    <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden"><div class="bg-green-500 h-full rounded-full" style="width: 98%"></div></div>
+                </div>
+                <button onclick="closeModal('modalPulseira', 'pulseiraContent')" class="w-full bg-slate-900 text-white font-black py-4.5 rounded-2xl active:scale-95 transition-transform tracking-[1.5px] text-[13px] uppercase shadow-[0_6px_12px_rgba(0,0,0,0.2)]">Fechar</button>
+            </div>
+        </div>
+
+        <div id="modalSettings" class="phone-modal flex-col items-center justify-center p-6 bg-black/60 opacity-0 pointer-events-none transition-opacity duration-300 flex">
+            <div class="bg-white w-full rounded-[28px] p-6 shadow-[0_16px_32px_rgba(0,0,0,0.25)] transform scale-95 transition-transform duration-300" id="settingsContent">
+                <h3 class="text-[20px] font-black text-slate-900 mb-5">Definições</h3>
+                
+                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-[2px]">Nome de Perfil</label>
+                <input id="input-name" type="text" value="João Ferreira" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 text-[15px] font-bold outline-none text-slate-900 mb-5">
+                
+                <div class="flex justify-between items-center mb-5">
+                    <span class="text-[14px] font-bold text-slate-900">Modo Escuro</span>
+                    <button onclick="toggleDarkMode()" id="dark-btn" class="w-12 h-6 bg-slate-200 rounded-full p-1 transition-colors relative"><div id="dark-circle" class="w-4 h-4 bg-white rounded-full transition-transform"></div></button>
+                </div>
+                
+                <button onclick="saveSettings()" class="w-full bg-slate-900 text-white font-black py-4.5 rounded-2xl active:scale-95 transition-transform tracking-[1.5px] text-[13px] uppercase shadow-[0_6px_12px_rgba(0,0,0,0.2)] mb-2">Salvar Alterações</button>
+                <button onclick="closeModal('modalSettings', 'settingsContent')" class="w-full text-slate-400 text-[14px] font-bold py-3">Fechar</button>
+            </div>
+        </div>
+
+        <div id="noWristbandModal" class="phone-modal bg-black/60 flex-col items-center justify-center p-6 opacity-0 pointer-events-none transition-opacity duration-300 flex">
+            <div class="bg-white w-full rounded-[28px] p-6 shadow-2xl text-center transform scale-95 transition-transform duration-300" id="noWristbandContent">
+                <div class="w-20 h-20 bg-yellow-100 rounded-full mx-auto flex items-center justify-center mb-4 border-4 border-yellow-50">
+                    <svg class="w-9 h-9 text-yellow-600" fill="currentColor" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+                </div>
+                <h3 class="text-[20px] font-black text-slate-900 mb-2">Pulseira Não Conectada!</h3>
+                <p class="text-slate-500 text-[14px] mb-6 leading-relaxed">O pedido utilizará o <strong class="text-slate-900 font-black">GPS do telemóvel</strong>.</p>
+                
+                <button onclick="continueToSOS()" class="w-full bg-yellow-500 text-white font-black py-4.5 rounded-2xl active:scale-95 transition-transform tracking-[2px] text-[13px] shadow-[0_8px_16px_rgba(234,179,8,0.3)] mb-2 uppercase">Compreendi, Pedir Ajuda</button>
+                <button onclick="closeModal('noWristbandModal', 'noWristbandContent')" class="w-full text-slate-400 font-bold py-3">Cancelar</button>
+            </div>
+        </div>
+
+        <div id="sosModal" class="phone-modal bg-black/50 flex-col justify-end p-0 opacity-0 pointer-events-none transition-opacity duration-300 flex">
+            <div class="bg-white w-full rounded-t-[28px] p-6 pb-8 shadow-2xl transform translate-y-full transition-transform duration-300" id="sosModalContent">
+                <div class="w-12 h-1.5 bg-slate-300 rounded-full mx-auto mb-5"></div>
+                <h3 class="text-red-600 font-bold text-[24px] mb-2">Pedir Ajuda (SOS)</h3>
+                <p class="text-slate-500 text-[14px] mb-4">As equipas médicas vão receber a tua posição e ficha clínica.</p>
+                
+                <div class="bg-red-50 rounded-[16px] p-4 mb-4 border border-red-200">
+                    <label class="block text-[10px] font-bold text-red-800 mb-2 uppercase tracking-[2px]">Informações Adicionais</label>
+                    <input id="sos-info" type="text" placeholder="Ex: Queda no relvado..." class="w-full bg-transparent border-b-[1.5px] border-red-300 py-2 text-[14px] outline-none text-slate-900">
+                </div>
+                
+                <button onclick="dispararSOSReal()" class="w-full bg-blue-600 text-white font-black py-4.5 rounded-2xl shadow-[0_8px_16px_rgba(37,99,235,0.3)] active:scale-95 transition-transform text-[13px] tracking-[2px] uppercase mb-2">Confirmar Pedido</button>
+                <button onclick="closeModal('sosModal', 'sosModalContent')" class="w-full text-red-600 font-bold py-3">Cancelar</button>
+            </div>
+        </div>
+
+        <div id="sosSuccessModal" class="phone-modal bg-black/85 flex-col items-center justify-center p-6 opacity-0 pointer-events-none transition-opacity duration-300 flex">
+            <div class="bg-white w-full rounded-[28px] p-6 shadow-2xl text-center transform scale-95 transition-transform duration-300" id="sosSuccessContent">
+                <div class="w-24 h-24 bg-green-100 rounded-full mx-auto flex items-center justify-center mb-5 border-4 border-green-200">
+                    <svg class="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <h3 class="text-[26px] font-black text-slate-900 mb-2">SOS Enviado!</h3>
+                <p class="text-slate-500 text-[14px] mb-4">Mantém a calma.</p>
+                <p class="text-red-600 font-black text-[20px] uppercase tracking-[1px] leading-relaxed mb-6">A equipa médica<br>está a caminho!</p>
+                
+                <button onclick="closeModal('sosSuccessModal', 'sosSuccessContent')" class="w-full bg-slate-900 text-white font-black py-4.5 rounded-2xl active:scale-95 transition-transform tracking-[1.5px] text-[13px] uppercase">Entendido</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // ── DADOS E ESTADO DA APP ──
+        const BLOOD_TYPES = ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'];
+        const COMMON_ALLERGIES = ['Pólen', 'Penicilina', 'Ácaros', 'Amendoim', 'Picadas', 'Látex'];
+        const MEDICATION_MAP = {
+            'Pólen': ['Anti-histamínico', 'Corticosteroide Nasal'],
+            'Penicilina': ['Eritromicina (Alternativa)'],
+            'Ácaros': ['Anti-histamínico'],
+            'Amendoim': ['EpiPen (Adrenalina)', 'Anti-histamínico'],
+            'Picadas': ['EpiPen (Adrenalina)', 'Pomada Corticoide'],
+            'Látex': ['Anti-histamínico', 'EpiPen (Adrenalina)']
+        };
+
+        let map; 
+        let isNfcOpen = false; 
+        let isWristbandPaired = false; 
+        let isDarkMode = false;
+        
+        let userData = { name: 'João Ferreira', initials: 'JF', bloodType: '' };
+        let selectedAllergies = [];
+        let selectedMeds = [];
+
+        window.onload = () => {
+            localStorage.removeItem('safeband_sos_ativo');
+            renderChips('blood-grid', BLOOD_TYPES, 'blood', false);
+            renderChips('allergies-grid', COMMON_ALLERGIES, 'allergy', true);
+            
+            // Para o modal de edição
+            renderChips('edit-blood-grid', BLOOD_TYPES, 'edit-blood', false);
+            renderChips('edit-allergies-grid', COMMON_ALLERGIES, 'edit-allergy', true);
+        };
+
+        // ── SISTEMA DE CHIPS (BOTÕES SELECIONÁVEIS) ──
+        function renderChips(containerId, items, type, multi) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            items.forEach(item => {
+                const btn = document.createElement('button');
+                btn.className = `chip bg-slate-50 border-[1.5px] border-slate-200 text-slate-600 font-extrabold text-[13px] px-4 py-3 rounded-xl flex-grow text-center`;
+                if(type.includes('blood') && userData.bloodType === item) btn.classList.add('active');
+                if(type.includes('allergy') && selectedAllergies.includes(item)) btn.classList.add('active');
+                if(type.includes('med') && selectedMeds.includes(item)) btn.classList.add('active-med');
+
+                btn.onclick = () => handleChipClick(item, type, multi, containerId);
+                btn.innerText = item;
+                container.appendChild(btn);
+            });
+        }
+
+        function handleChipClick(item, type, multi, containerId) {
+            if (type.includes('blood')) {
+                userData.bloodType = userData.bloodType === item ? '' : item;
+                renderChips(containerId, BLOOD_TYPES, type, multi);
+            } else if (type.includes('allergy')) {
+                if (selectedAllergies.includes(item)) selectedAllergies = selectedAllergies.filter(a => a !== item);
+                else selectedAllergies.push(item);
+                renderChips(containerId, COMMON_ALLERGIES, type, multi);
+                updateMeds(type.startsWith('edit-') ? 'edit-' : '');
+            } else if (type.includes('med')) {
+                if (selectedMeds.includes(item)) selectedMeds = selectedMeds.filter(m => m !== item);
+                else selectedMeds.push(item);
+                renderChips(containerId, getSuggestedMeds(), type, multi);
+            }
+        }
+
+        function getSuggestedMeds() {
+            let meds = [];
+            selectedAllergies.forEach(a => { if(MEDICATION_MAP[a]) meds = meds.concat(MEDICATION_MAP[a]); });
+            return [...new Set(meds)];
+        }
+
+        function updateMeds(prefix = '') {
+            const suggested = getSuggestedMeds();
+            const container = document.getElementById(prefix + 'meds-container');
+            const customInput = document.getElementById(prefix + 'custom-allergy').value.trim();
+            
+            if (selectedAllergies.length > 0 || customInput.length > 0) {
+                container.classList.remove('hidden');
+                renderChips(prefix + 'meds-grid', suggested, prefix + 'med', true);
+            } else {
+                container.classList.add('hidden');
+                selectedMeds = [];
+            }
+        }
+
+        document.getElementById('custom-allergy').addEventListener('input', () => updateMeds(''));
+        document.getElementById('edit-custom-allergy').addEventListener('input', () => updateMeds('edit-'));
+
+        // ── MODAIS ──
+        function openModal(modalId, contentId = null) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            if (contentId) {
+                const content = document.getElementById(contentId);
+                if (content.classList.contains('translate-y-full')) content.classList.remove('translate-y-full');
+                else { content.classList.remove('scale-95'); content.classList.add('scale-100'); }
+            }
+        }
+
+        function closeModal(modalId, contentId = null) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            if (contentId) {
+                const content = document.getElementById(contentId);
+                if (content.classList.contains('scale-100')) { content.classList.remove('scale-100'); content.classList.add('scale-95'); }
+                else content.classList.add('translate-y-full');
+            }
+        }
+
+        // ── NAVEGAÇÃO ──
+        function doLogin() {
+            document.getElementById('loginScreen').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('onboardingScreen').classList.remove('opacity-0', 'pointer-events-none');
+        }
+
+        function nextStep(step) {
+            document.getElementById('ob-step-1').classList.add('hidden');
+            document.getElementById('ob-step-2').classList.add('hidden');
+            document.getElementById('ob-step-3').classList.add('hidden');
+            document.getElementById('ob-step-' + step).classList.remove('hidden');
+            if(step === 2) document.getElementById('ob-progress').style.width = '66%';
+            if(step === 3) document.getElementById('ob-progress').style.width = '100%';
+        }
+
+        function buildClinicalString(prefix = '') {
+            const customA = document.getElementById(prefix + 'custom-allergy').value.trim();
+            const customM = document.getElementById(prefix + 'custom-med').value.trim();
+            
+            let finalAllergies = [...selectedAllergies];
+            if(customA) finalAllergies.push(customA);
+            
+            let finalMeds = [...selectedMeds];
+            if(customM) finalMeds.push(customM);
+
+            let res = finalAllergies.join(', ') || '';
+            if(finalMeds.length > 0) res += (res ? ' | Med: ' : 'Med: ') + finalMeds.join(', ');
+            return res;
+        }
+
+        function updateUIProfile(prefix = '') {
+            const name = document.getElementById(prefix === 'edit-' ? 'input-name' : 'ob-name-input').value || "Utilizador";
+            userData.name = name;
+            userData.initials = name.split(' ').map(x=>x[0]).join('').toUpperCase().substring(0,2);
+            
+            document.getElementById('display-name').innerText = name;
+            document.getElementById('menu-name').innerText = name;
+            document.getElementById('profile-img').innerText = userData.initials;
+            document.getElementById('header-avatar').innerText = userData.initials;
+            document.getElementById('menu-avatar').innerText = userData.initials;
+
+            const clinicalStr = buildClinicalString(prefix === 'edit-' ? 'edit-' : '');
+            const hasData = userData.bloodType || clinicalStr;
+
+            if(hasData) {
+                const statusEl = document.getElementById('medical-status');
+                statusEl.className = "text-green-600 font-bold text-[13px] mt-1";
+                statusEl.innerText = `${userData.bloodType || "N/D"} | Dados Salvos`;
+                document.getElementById('complete-btn').classList.add('hidden');
+            } else {
+                document.getElementById('complete-btn').classList.remove('hidden');
+            }
+        }
+
+        function finishOnboarding() {
+            updateUIProfile('');
+            document.getElementById('onboardingScreen').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('floating-sos-btn').classList.remove('hidden');
+        }
+
+        function saveMedicalData() {
+            updateUIProfile('edit-');
+            closeModal('modalMedical', 'medicalContent');
+        }
+
+        function saveSettings() {
+            updateUIProfile('edit-');
+            closeModal('modalSettings', 'settingsContent');
+        }
+
+        function toggleMenu() { document.getElementById('sideMenu').classList.toggle('open'); }
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-section').forEach(t => { t.classList.remove('flex'); t.classList.add('hidden'); });
+            document.getElementById(tabId).classList.remove('hidden'); document.getElementById(tabId).classList.add('flex');
+            
+            document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('bg-red-600', 'text-white', 'shadow-[0_4px_8px_rgba(220,38,38,0.3)]'); b.classList.add('bg-slate-50', 'text-slate-400'); });
+            document.getElementById('btn-' + tabId).classList.replace('bg-slate-50', 'bg-red-600');
+            document.getElementById('btn-' + tabId).classList.replace('text-slate-400', 'text-white');
+            document.getElementById('btn-' + tabId).classList.add('shadow-[0_4px_8px_rgba(220,38,38,0.3)]');
+            
+            if (tabId === 'mapa') { setTimeout(() => { if (!map) initMap(); map.invalidateSize(); }, 100); }
+        }
+
+        function initMap() {
+            map = L.map('main-map', { center: [38.7368, -9.1386], zoom: 18, zoomControl: false });
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+            const blueIcon = L.divIcon({ className: 'custom-icon', html: `<div class="relative w-5 h-5"><div class="absolute inset-0 bg-blue-500 rounded-full animate-ping opacity-75"></div><div class="relative w-5 h-5 bg-blue-600 border-2 border-white rounded-full shadow-lg"></div></div>`, iconSize: [20, 20], iconAnchor: [10, 10] });
+            L.marker([38.7360506, -9.1379303], { icon: blueIcon }).addTo(map);
+            const redIcon = L.divIcon({ className: 'custom-icon', html: `<div class="w-4 h-4 bg-red-600 border-2 border-white rounded-full shadow-lg"></div>`, iconSize: [16, 16], iconAnchor: [8, 8] });
+            L.marker([38.7368, -9.1386], { icon: redIcon }).addTo(map);
+        }
+
+        function toggleDarkMode() {
+            isDarkMode = !isDarkMode;
+            const phone = document.getElementById('phone-frame');
+            const circle = document.getElementById('dark-circle');
+            if(isDarkMode) { phone.classList.add('dark-mode'); circle.classList.add('translate-x-6'); } 
+            else { phone.classList.remove('dark-mode'); circle.classList.remove('translate-x-6'); }
+        }
+
+        // ── EMPARELHAMENTO E SOS ──
+        function startPairing() { openModal('nfcModal'); isNfcOpen = true; }
+
+        document.addEventListener('keydown', function(event) { 
+            if ((event.key === 'z' || event.key === 'Z') && isNfcOpen) finishPairing(true); 
+        });
+
+        function finishPairing(success) {
+            isNfcOpen = false;
+            closeModal('nfcModal');
+            
+            if(success) {
+                isWristbandPaired = true; 
+                const btnCard = document.getElementById('pair-btn');
+                btnCard.innerHTML = `<span class="text-green-700">Pulseira Associada (#SB-119)</span><span class="text-[11px] text-slate-500 font-medium mt-1">Bateria: 98% | Sinal: Excelente</span>`;
+                btnCard.classList.replace('bg-slate-50', 'bg-green-50');
+                btnCard.classList.replace('border-slate-200', 'border-green-200');
+                btnCard.setAttribute('onclick', "openModal('modalPulseira', 'pulseiraContent')");
+
+                document.getElementById('status-tag').innerText = "Online"; 
+                document.getElementById('status-tag').classList.replace('text-red-600', 'text-green-600');
+                
+                const menuBtn = document.getElementById('menu-pulseira-btn');
+                menuBtn.innerHTML = `<svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg><span class="font-semibold text-[15px]">Dados da Pulseira</span><span class="ml-auto text-[11px] font-bold bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full">98%</span>`;
+                menuBtn.setAttribute('onclick', "toggleMenu(); openModal('modalPulseira', 'pulseiraContent')");
+            }
+        }
+
+        function handleSOSClick() {
+            if (!isWristbandPaired) openModal('noWristbandModal', 'noWristbandContent');
+            else openModal('sosModal', 'sosModalContent'); 
+        }
+
+        function continueToSOS() { 
+            closeModal('noWristbandModal', 'noWristbandContent'); 
+            openModal('sosModal', 'sosModalContent'); 
+        }
+
+        function dispararSOSReal() {
+            const extraInfo = document.getElementById('sos-info').value || "Nenhuma informação adicional.";
+            let zonaSOS = isWristbandPaired ? "ZONA C - Relvado Central" : "GPS Telemóvel (Precisão Reduzida)";
+            
+            const payload = {
+                id: isWristbandPaired ? '#SB-119' : 'Sem Pulseira (App)',
+                nome: userData.name,
+                info: extraInfo,
+                sangue: userData.bloodType || 'N/D',
+                alergias: buildClinicalString('edit-') || buildClinicalString('') || 'Nenhuma',
+                zona: zonaSOS,
+                timestamp: new Date().getTime()
+            };
+
+            localStorage.setItem('safeband_sos_ativo', JSON.stringify(payload));
+            
+            closeModal('sosModal', 'sosModalContent'); 
+            openModal('sosSuccessModal', 'sosSuccessContent');
+        }
+    </script>
+</body>
+</html>
