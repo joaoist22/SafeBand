@@ -6,7 +6,26 @@ import logoImgLight from '../../assets/logo/logo.png';
 import logoImgDark from '../../assets/logo/logo_inv_bg.png';
 import '../../styles/Navbar.css';
 
-const Navbar = ({ isDarkMode, toggleTheme }) => {
+const textos = {
+    pt: {
+      inicio: "Início",
+      sobre: "Sobre",
+      equipa: "Equipa",
+      blog: "Blog",
+      simulacao: "Simulação",
+      contactos: "Contactos"
+    },
+    en: {
+      inicio: "Home",
+      sobre: "About",
+      equipa: "Team",
+      blog: "Blog",
+      simulacao: "Simulation", // ou "Demo"
+      contactos: "Contacts"
+    }
+  };
+
+const Navbar = ({ isDarkMode, toggleTheme, language, toggleLanguage }) => {
   const [pulseColor, setPulseColor] = useState('#57cbcc');
   const [isMenuOpen, setIsMenuOpen] = useState(false); // Estado para o hambúrguer
 
@@ -51,17 +70,34 @@ const Navbar = ({ isDarkMode, toggleTheme }) => {
       <div className={`navbar-content ${isMenuOpen ? 'open' : ''}`}>
         
         <nav className="navbar-links">
-          <NavHashLink smooth to="/#inicio" onClick={closeMenu}>Início</NavHashLink>
-          <NavHashLink smooth to="/#sobre" onClick={closeMenu}>Sobre</NavHashLink>
-          <NavHashLink smooth to="/#equipa" onClick={closeMenu}>Equipa</NavHashLink>
-          <Link to="/blog" onClick={closeMenu}>Blog</Link>
-          <NavHashLink smooth to="/#contactos" onClick={closeMenu}>Contactos</NavHashLink>
+          <NavHashLink smooth to="/#inicio" onClick={closeMenu}>
+            {textos[language].inicio}
+          </NavHashLink>
+          
+          <NavHashLink smooth to="/#sobre" onClick={closeMenu}>
+            {textos[language].sobre}
+          </NavHashLink>
+          
+          <NavHashLink smooth to="/#equipa" onClick={closeMenu}>
+            {textos[language].equipa}
+          </NavHashLink>
+          
+          <Link to="/blog" onClick={closeMenu}>
+            {textos[language].blog}
+          </Link>
+          
+          <NavHashLink smooth to="/#simulacao" onClick={closeMenu}>
+            {textos[language].simulacao}
+          </NavHashLink>
+          
+          <NavHashLink smooth to="/#contactos" onClick={closeMenu}>
+            {textos[language].contactos}
+          </NavHashLink>
         </nav>
-
         <div className="navbar-controls">
-          <button className="control-btn language-btn">
+          <button className="control-btn language-btn" onClick={toggleLanguage}>
             <Globe size={20} />
-            <span>PT</span>
+            <span>{language === 'pt' ? 'PT' : 'EN'}</span>
           </button>
 
           <div className="theme-toggle" onClick={() => { toggleTheme(); closeMenu(); }} style={{ cursor: 'pointer' }}>

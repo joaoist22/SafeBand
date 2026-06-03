@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import '../../styles/Intro.css';
 
 // O TEU LOGO!
-import logoImg from '../../assets/logo/logo_tiny.png'; 
+import logoImg from '../../assets/logo/logoo.png'; 
 
 const Intro = ({ onComplete }) => {
   const [step, setStep] = useState(0);

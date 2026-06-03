@@ -136,6 +136,10 @@
   border: none;
   border-radius: 33px;
 }
+.text-highlight {
+  color: #57cbcc;
+  position: relative;
+}
 
 /* Responsivo para telemóveis */
 @media (max-width: 1100px) {

@@ -6,7 +6,27 @@ import pulseiraBlack from '../../assets/pulseira/black.PNG';
 import pulseiraWhite from '../../assets/pulseira/white.PNG';
 import PhoneMockup from './PhoneMockup';
 
-const Hero = ({ isDarkMode }) => {
+// 1. Receber a propriedade 'language'
+const Hero = ({ isDarkMode, language }) => {
+
+  // 2. O nosso dicionário PT / EN
+  const t = {
+    pt: {
+      titulo: <>A Segurança <br/> <span className="text-highlight">no Teu Pulso.</span></>,
+      descricao: "Tecnologia que salva. Segurança que conecta. Uma solução integrada de resposta a emergências para grandes eventos, onde cada segundo conta.",
+      btn1: "Descobrir Tecnologia",
+      btn2: "Pedir Demonstração"
+    },
+    en: {
+      titulo: <>Safety <br/> <span className="text-highlight">on Your Wrist.</span></>,
+      descricao: "Technology that saves. Security that connects. An integrated emergency response solution for large events, where every second counts.",
+      btn1: "Discover Technology",
+      btn2: "Request a Demo"
+    }
+  };
+
+  const text = t[language] || t.pt;
+
   return (
     <section id="inicio" className={`hero-section ${isDarkMode ? 'hero-dark' : ''}`}>
       <div className="hero-container">
@@ -68,8 +88,8 @@ const Hero = ({ isDarkMode }) => {
             animate={{ opacity: 1, x: 0 }}
             style={{ color: isDarkMode ? '#fff' : '#1a1c23' }}
           >
-            A Segurança <br/>
-            <span className="text-highlight">no Teu Pulso.</span>
+            {/* O Título com quebra de linha já vem do dicionário */}
+            {text.titulo}
           </motion.h1>
           
           <motion.p 
@@ -78,12 +98,12 @@ const Hero = ({ isDarkMode }) => {
             transition={{ delay: 0.4 }}
             style={{ color: isDarkMode ? '#ccc' : '#555' }}
           >
-            Tecnologia que salva. Segurança que conecta. Uma solução integrada de resposta a emergências para grandes eventos, onde cada segundo conta.
+            {text.descricao}
           </motion.p>
           
           <div className="hero-buttons">
-            <a href="#simulacao" className="btn-primary">Descobrir Tecnologia</a>
-            <a href="#contactos" className="btn-secondary">Pedir Demonstração</a>
+            <a href="#simulacao" className="btn-primary">{text.btn1}</a>
+            <a href="#contactos" className="btn-secondary">{text.btn2}</a>
           </div>
         </div>
 

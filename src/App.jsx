@@ -29,22 +29,32 @@ function App() {
 
   const toggleTheme = () => setIsDarkMode(!isDarkMode);
 
+  const [language, setLanguage] = useState('pt'); 
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'pt' ? 'en' : 'pt');
+  };
+
   return (
     <Router>
       <div className={isDarkMode ? 'dark-theme-active' : ''} style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         {!introFinished && <Intro onComplete={() => setIntroFinished(true)} />}
         
-        <Navbar isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
-        
+        <Navbar 
+          isDarkMode={isDarkMode} 
+          toggleTheme={toggleTheme} 
+          language={language} 
+          toggleLanguage={toggleLanguage} 
+        />
         <Routes>
           {/* ROTA DA LANDING PAGE PRINCIPAL */}
           <Route path="/" element={
             <main>
-              <Hero isDarkMode={isDarkMode} />
-              <About isDarkMode={isDarkMode} />
-              <AppShowcase isDarkMode={isDarkMode} />
-              <Team isDarkMode={isDarkMode} />
-              <Contact isDarkMode={isDarkMode} />
+              <Hero isDarkMode={isDarkMode} language={language} />
+              <About isDarkMode={isDarkMode} language={language} />
+              <AppShowcase isDarkMode={isDarkMode} language={language} />
+              <Team isDarkMode={isDarkMode} language={language} />
+              <Contact isDarkMode={isDarkMode} language={language} />
             </main>
           } />
 

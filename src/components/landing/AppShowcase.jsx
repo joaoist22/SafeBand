@@ -2,27 +2,39 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import '../../styles/AppShowcase.css';
 
-const AppShowcase = ({ isDarkMode }) => {
+const AppShowcase = ({ isDarkMode, language }) => {
+  
+  // O dicionário agora guarda o HTML para podermos trocar a ordem!
+  const t = {
+    pt: {
+      titulo: <><span className="text-highlight">Simulação</span>  em Tempo Real</>,
+      descricao: "Interage com o telemóvel à direita para acionar um pedido de SOS. Observa a resposta imediata na Central Médica de Triagem."
+    },
+    en: {
+      titulo: <>Real Time <span className="text-highlight">Simulation</span></>,
+      descricao: "Interact with the phone on the right to trigger an SOS request. Watch the immediate response on the Medical Triage Dashboard."
+    }
+  };
+
+  const text = t[language] || t.pt;
+
   return (
     <section id="simulacao" className={`about-section ${isDarkMode ? 'dark' : ''}`}>
       <div className="about-container">
         
         <div className="about-header">
             <motion.h1 
-                        initial={{ opacity: 0, x: 100 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        style={{ color: isDarkMode ? '#fff' : '#1a1c23' }}
-                      >
-                        
-                        <span className="text-highlight">Simulação</span> <br/>
-                        em Tempo Real
-                      </motion.h1>
-                      
-          
-          <p className="main-description">
-            Interage com o telemóvel à direita para acionar um pedido de SOS. 
-            Observa a resposta imediata na Central Médica de Triagem.
-          </p>
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              style={{ color: isDarkMode ? '#fff' : '#1a1c23' }}
+            >
+              {/* O título inteiro com as quebras de linha já vem do dicionário */}
+              {text.titulo}
+            </motion.h1>
+            
+            <p className="main-description">
+              {text.descricao}
+            </p>
         </div>
 
         <div className="showcase-interactive-area">

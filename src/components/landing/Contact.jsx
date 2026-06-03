@@ -1,15 +1,58 @@
 import React, { useRef, useState } from 'react';
 import { MapPin, Mail, Send } from 'lucide-react';
-import emailjs from '@emailjs/browser'; // Não te esqueças: npm install @emailjs/browser
+import emailjs from '@emailjs/browser'; 
 import '../../styles/Contact.css';
 
-const Contact = ({ isDarkMode }) => {
+// 1. Receber o 'language' aqui!
+const Contact = ({ isDarkMode, language }) => {
   const form = useRef();
-  const [status, setStatus] = useState('');
+  
+  // Vamos guardar apenas a fase em que o envio está ('enviando', 'sucesso', 'erro', ou '')
+  const [statusState, setStatusState] = useState(''); 
+
+  // 2. O nosso dicionário PT / EN
+  const t = {
+    pt: {
+      titulo: <>Fala <span className="text-highlight">Connosco</span></>,
+      subtitulo: "Tens interesse no projeto Safeband? Envia-nos as tuas dúvidas.",
+      nome: "O teu Nome",
+      email: "O teu Email",
+      motivoSelect: "Qual o motivo do contacto?",
+      motivo1: "Dúvida Técnica",
+      motivo2: "Parceria / Investimento",
+      motivo3: "Outro assunto",
+      mensagem: "A tua Mensagem...",
+      btnEnviar: "Enviar Mensagem",
+      statusEnviando: "A enviar...",
+      statusSucesso: "Mensagem enviada! ✅",
+      statusErro: "Erro ao enviar. ❌",
+      localizacao: "Localização",
+      morada: <>Instituto Superior Técnico<br />Av. Rovisco Pais 1, 1049-001 Lisboa</>
+    },
+    en: {
+      titulo: <>Get in <span className="text-highlight">Touch</span></>,
+      subtitulo: "Are you interested in the Safeband project? Send us your questions.",
+      nome: "Your Name",
+      email: "Your Email",
+      motivoSelect: "What is the subject of your contact?",
+      motivo1: "Technical Question",
+      motivo2: "Partnership / Investment",
+      motivo3: "Other subject",
+      mensagem: "Your Message...",
+      btnEnviar: "Send Message",
+      statusEnviando: "Sending...",
+      statusSucesso: "Message sent! ✅",
+      statusErro: "Error sending. ❌",
+      localizacao: "Location",
+      morada: <>Instituto Superior Técnico<br />Av. Rovisco Pais 1, 1049-001 Lisbon</>
+    }
+  };
+
+  const text = t[language] || t.pt;
 
   const sendEmail = (e) => {
     e.preventDefault();
-    setStatus('A enviar...');
+    setStatusState('enviando'); // Define a fase de envio
 
     // Configuração do EmailJS
     emailjs.sendForm(
@@ -19,21 +62,34 @@ const Contact = ({ isDarkMode }) => {
       'CzOEQyhLBtcem8K9u'
     )
     .then(() => {
-        setStatus('Mensagem enviada! ✅');
+        setStatusState('sucesso');
         e.target.reset(); // Limpa o formulário após o sucesso
+        
+        // Limpa a mensagem de sucesso após 5 segundos
+        setTimeout(() => setStatusState(''), 5000);
     }, (error) => {
         console.error(error.text);
-        setStatus('Erro ao enviar. ❌');
+        setStatusState('erro');
+        setTimeout(() => setStatusState(''), 5000);
     });
+  };
+
+  // Função para saber o que escrever no botão
+  const getButtonText = () => {
+    if (statusState === 'enviando') return text.statusEnviando;
+    if (statusState === 'sucesso') return text.statusSucesso;
+    if (statusState === 'erro') return text.statusErro;
+    return text.btnEnviar;
   };
 
   return (
     <section id="contactos" className={`contact-section ${isDarkMode ? 'dark' : ''}`}>
       <div className="contact-container">  
+        
         <div className="contact-header">
-          <h2>Fala <span className="text-highlight">Connosco</span></h2>
+          <h2>{text.titulo}</h2>
           <div className="border-meghna"></div>
-          <p>Tens interesse no projeto Safeband? Envia-nos as tuas dúvidas.</p>
+          <p>{text.subtitulo}</p>
         </div>
 
         <div className="contact-grid">
@@ -42,22 +98,22 @@ const Contact = ({ isDarkMode }) => {
           <div className="contact-form-box">
             <form ref={form} onSubmit={sendEmail} className="form">
               <div className="input-group">
-                <input type="text" name="user_name" placeholder="O teu Nome" required />
-                <input type="email" name="user_email" placeholder="O teu Email" required />
+                <input type="text" name="user_name" placeholder={text.nome} required />
+                <input type="email" name="user_email" placeholder={text.email} required />
               </div>
               
               <select name="subject" className="form-select" required defaultValue="">
-                <option value="" disabled>Qual o motivo do contacto?</option>
-                <option value="duvida">Dúvida Técnica</option>
-                <option value="parceria">Parceria / Investimento</option>
-                <option value="outro">Outro assunto</option>
+                <option value="" disabled>{text.motivoSelect}</option>
+                <option value="duvida">{text.motivo1}</option>
+                <option value="parceria">{text.motivo2}</option>
+                <option value="outro">{text.motivo3}</option>
               </select>
 
-              <textarea name="message" placeholder="A tua Mensagem..." rows="5" required></textarea>
+              <textarea name="message" placeholder={text.mensagem} rows="5" required></textarea>
               
-              <button type="submit" className="submit-btn">
+              <button type="submit" className="submit-btn" disabled={statusState === 'enviando'}>
                 <Send size={18} />
-                <span>{status || 'Enviar Mensagem'}</span>
+                <span>{getButtonText()}</span>
               </button>
             </form>
           </div>
@@ -67,11 +123,11 @@ const Contact = ({ isDarkMode }) => {
             <div className="info-item">
               <div className="info-icon"><MapPin size={24} /></div>
               <div>
-                <h4>Localização</h4>
-                <p>Instituto Superior Técnico<br />Av. Rovisco Pais 1, 1049-001 Lisboa</p>
+                <h4>{text.localizacao}</h4>
+                <p>{text.morada}</p>
               </div>
             </div>
-
+          
             <div className="info-item">
               <div className="info-icon"><Mail size={24} /></div>
               <div>

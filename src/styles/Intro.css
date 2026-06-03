@@ -20,7 +20,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: #ff004c; /* Cor do alerta Sentinel */
+  background-color: #000000; /* Cor do alerta Sentinel */
   z-index: 15; /* Tapa o radar (z-index 10) mas fica atrás do logo */
 }
 
