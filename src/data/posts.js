@@ -16,6 +16,7 @@ import imgHardware from '../assets/fotos_diversas/hardware.jpg';
 import imgEletrical from '../assets/fotos_diversas/eletrical.jpg';
 import imgPrototipo from '../assets/fotos_diversas/prototipo.jpg';
 import imgApp from '../assets/fotos_diversas/app.png';
+import imgArquitetura from '../assets/fotos_diversas/arquitetura.png';
 
 export const postData = [
   {
@@ -227,5 +228,35 @@ export const postData = [
                 Neste momento, a equipa está fechada no laboratório a gravar as cenas para o nosso vídeo promocional, que vai arrancar em peso a mostrar o caos das falhas de rede em festivais, e a preparar a demonstração prática da App.
 
                 O Eletroday aproxima-se e nós estamos prontos para mostrar a SafeBand ao mundo!`
+    },{
+        id: "11",
+        tag: "Missão Cumprida",
+        title: "A SafeBand Está Entregue!",
+        author: "João Jesus",
+        
+        // 2. Usar a variável da foto (Sem aspas!)
+        authorImage: fotoJesus, 
+        
+        // 3. O Link que vai abrir quando clicarem no teu nome/foto
+        authorLinkedIn: "https://www.linkedin.com/in/joaojesus9000",
+        
+        date: "10 Junho, 2026",
+        image: imgArquitetura,
+        excerpt:"Projeto entregue! Concluímos oficialmente a SafeBand com a entrega do Resumo Executivo, Poster, Pitch Deck e do nosso vídeo final. Fechámos o ecossistema com uma arquitetura IoT robusta: a pulseira envia os dados de rádio e o nosso backend calcula a localização exata numa dashboard interativa para os médicos. Missão cumprida!",
+        content:`O grande dia chegou. Depois de meses de planeamento, noites em claro no laboratório e muita linha de código batida, a equipa SafeBand concluiu com sucesso a entrega de todos os materiais finais do projeto! Entregámos o nosso Resumo Executivo, o Poster Técnico, o Pitch Deck final e, claro, o nosso Vídeo Demonstrativo.  
+
+                O projeto que levámos até à linha da meta evoluiu imenso nas últimas semanas, transformando-se num ecossistema IoT maduro, robusto e perfeitamente alinhado com as melhores práticas da engenharia atual:  
+
+                - Nova Arquitetura de Redes e Dados: Dizemos adeus à antiga lógica de adivinhar zonas na própria pulseira. Agora, o nosso dispositivo atua de forma muito mais inteligente e leve: faz a recolha contínua das forças de sinal (RSSI) de três beacons fixos no recinto (SAFEBAND_B1, B2 e B3). Quando o SOS é premido, estes dados brutos são disparados via rádio LoRa de longo alcance.  
+
+                - O Poder do Nosso Backend: A nossa Torre LoRa atua agora como um Gateway puro, reencaminhando os pacotes instantaneamente para o servidor central. É no backend que a verdadeira magia matemática acontece: o sistema corre os algoritmos de trilateração para calcular as coordenadas exatas (x,y), a área provável de busca e o nível de confiança da estimativa.  
+
+                - Dashboard e WebApp Operacionais: Desenvolvemos com sucesso as duas interfaces da nossa aplicação. O participante pode gerir o seu perfil clínico, enquanto a equipa médica tem acesso a uma dashboard interativa que plota em tempo real a localização tridimensional do paciente com um círculo de incerteza e a sua ficha médica completa (alergias, medicação e tipo de sangue).  
+
+                - Hardware no Terreno: Embora a escassez de componentes no mercado nos tenha impedido de avançar para a PCB final de fábrica, o nosso protótipo físico ficou totalmente funcional numa protoboard integrada com o módulo de vibração, botão mecânico de emergência e LEDs de sinalização visual.  
+
+                A entrega de hoje marca o fim de uma jornada académica incrível de trabalho em equipa. Criámos uma solução viável, escalável e com o potencial real de salvar vidas em grandes eventos.  
+
+                O nosso enorme obrigado a todos os que nos apoiaram, responderam aos nossos inquéritos e acompanharam esta aventura no blogue. A SafeBand está pronta!`
     }
 ];
