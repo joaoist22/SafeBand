@@ -250,4 +250,41 @@
     left: -15%; 
     max-width: 220px; 
   }
+  @media (max-width: 768px) {
+  /* Esconder os gráficos ECG no mobile, geram ruído e quebram a margem */
+  .ecg-wrapper {
+    display: none !important;
+  }
+
+  /* Centrar a zona visual */
+  .hero-visuals {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 250px;
+    position: relative;
+    margin-bottom: 30px;
+    width: 100%;
+  }
+
+  /* Ajustar a Pulseira */
+  .hero-product-img {
+    max-width: 160px !important; /* Fica mais pequena */
+    position: relative;
+    z-index: 2;
+    margin-right: -30px; /* Faz a pulseira sobrepor ligeiramente o telemóvel */
+    left: auto;
+    top: auto;
+  }
+
+  /* Ajustar o Telemóvel */
+  .hero-phone-wrapper {
+    max-width: 130px !important; /* Telemóvel mais pequeno */
+    position: relative;
+    z-index: 1;
+    right: auto;
+    top: auto;
+    transform: rotate(5deg) !important; /* Apenas um ligeiro ângulo para estilo */
+  }
+}
 }

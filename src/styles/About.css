@@ -254,4 +254,25 @@
   .timeline-item {
     padding: 0; /* Remove o padding lateral que servia para o PC */
   }
+  @media (max-width: 768px) {
+  /* Forçar a linha principal a ficar exatamente no meio */
+  .timeline-container::before {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .timeline-item {
+    text-align: center;
+    width: 100%;
+    padding: 0 15px;
+  }
+
+  /* Forçar a bolinha a alinhar ao centro da linha */
+  .timeline-dot {
+    margin: 0 auto 15px auto; 
+    position: relative;
+    left: auto;
+    transform: none; /* Remove margens ou posicionamentos estranhos */
+  }
+}
 }
