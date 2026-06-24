@@ -15,6 +15,8 @@ import imgFestival from '../assets/fotos_diversas/festival.jpg';
 import imgHardware from '../assets/fotos_diversas/hardware.jpg';
 import imgEletrical from '../assets/fotos_diversas/eletrical.jpg';
 import imgPrototipo from '../assets/fotos_diversas/prototipo.jpg';
+import imgApp from '../assets/fotos_diversas/app.png';
+import imgArquitetura from '../assets/fotos_diversas/arquitetura.png';
 
 export const postData = [
   {
@@ -196,5 +198,65 @@ export const postData = [
                 Nós não queremos construir tecnologia fechados num quarto; queremos resolver problemas reais. Por isso, lançámos um inquérito ao público e obtivemos mais de 80 respostas! Quisemos saber com que frequência vão a festivais, se estariam dispostos a usar uma pulseira extra, como gostariam de a receber e qual a sua abertura para partilhar informações vitais (como alergias ou tipo sanguíneo) com equipas médicas.
 
                 Os dados que recolhemos validam a nossa missão e dão-nos uma base sólida para o futuro do projeto. O público quer sentir-se seguro, e a SafeBand está cada vez mais perto de garantir exatamente isso.` 
+    },{
+        id: "10",
+        tag: "Reta Final",
+        title: "Menos Complicação, Mais Ação (e o Foco nos Médicos!)",
+        author: "João Jesus",
+        
+        // 2. Usar a variável da foto (Sem aspas!)
+        authorImage: fotoJesus, 
+        
+        // 3. O Link que vai abrir quando clicarem no teu nome/foto
+        authorLinkedIn: "https://www.linkedin.com/in/joaojesus9000",
+        
+        date: "6 Junho, 2026",
+        image: imgApp,
+        excerpt:"Reta final na SafeBand! Decidimos simplificar o hardware removendo o NFC e usando apenas o BLE para emparelhar a App à pulseira. A grande novidade é o novo Modo Médico: o SOS desliga-se automaticamente assim que um paramédico chega perto do paciente. O código está fechado, o hardware está funcional e estamos a gravar o nosso vídeo promocional!",
+        content:`Entrámos oficialmente na reta final do projeto e, em engenharia, trabalhar com prazos apertados significa tomar decisões inteligentes para "cortar a gordura". Esta semana, a equipa SafeBand esteve focada em simplificar o nosso hardware e em refinar a experiência de quem realmente vai fazer a diferença: as equipas de socorro.
+
+                Aqui estão os nossos maiores avanços rumo à apresentação final:
+
+                1. Adeus NFC, Olá BLE (Bluetooth): Decidimos remover o NFC do projeto. Porquê? Porque a melhor engenharia é a mais eficiente. Percebemos que o emparelhamento inicial entre o telemóvel do utilizador e a SafeBand pode ser feito de forma perfeitamente segura e imediata através do Bluetooth (BLE) que o nosso microcontrolador já possui de forma nativa. É menos uma antena no circuito, menos espaço ocupado na caixa da pulseira e menos margem para falhas físicas.
+
+                2. A "Via Verde" está a Comunicar: O nosso código principal está fechado e "à prova de bala". A aplicação móvel, a emissão LoRa e a nossa Torre já estão a responder ao servidor em perfeita harmonia e sem atrasos.
+
+                3. A Pulseira do Médico (O nosso trunfo): A grande novidade da semana é o desenvolvimento do "Modo Paramédico". Quando um profissional de saúde (também equipado com uma SafeBand) se aproxima da vítima no meio do recinto, a pulseira do paciente deteta-o através do sinal BLE. Imediatamente, o sinal de SOS é desativado no sistema central, os LEDs mudam de padrão para sinalizar que o socorro chegou, e as pulseiras das pessoas à volta recebem ordens visuais para abrir espaço!
+
+                4. Hardware Real e Funcional: Com as limitações de tempo e a escassez de stock de chips ultracompactos no mercado para a criação de uma placa impressa (PCB) à medida, abraçámos a versatilidade. O nosso protótipo físico ganha vida numa protoboard robusta. Mais importante do que uma placa polida de fábrica, é provar que a nossa inovação de comunicação híbrida resolve o problema real das redes congestionadas.
+
+                Neste momento, a equipa está fechada no laboratório a gravar as cenas para o nosso vídeo promocional, que vai arrancar em peso a mostrar o caos das falhas de rede em festivais, e a preparar a demonstração prática da App.
+
+                O Eletroday aproxima-se e nós estamos prontos para mostrar a SafeBand ao mundo!`
+    },{
+        id: "11",
+        tag: "Missão Cumprida",
+        title: "A SafeBand Está Entregue!",
+        author: "João Jesus",
+        
+        // 2. Usar a variável da foto (Sem aspas!)
+        authorImage: fotoJesus, 
+        
+        // 3. O Link que vai abrir quando clicarem no teu nome/foto
+        authorLinkedIn: "https://www.linkedin.com/in/joaojesus9000",
+        
+        date: "10 Junho, 2026",
+        image: imgArquitetura,
+        excerpt:"Projeto entregue! Concluímos oficialmente a SafeBand com a entrega do Resumo Executivo, Poster, Pitch Deck e do nosso vídeo final. Fechámos o ecossistema com uma arquitetura IoT robusta: a pulseira envia os dados de rádio e o nosso backend calcula a localização exata numa dashboard interativa para os médicos. Missão cumprida!",
+        content:`O grande dia chegou. Depois de meses de planeamento, noites em claro no laboratório e muita linha de código batida, a equipa SafeBand concluiu com sucesso a entrega de todos os materiais finais do projeto! Entregámos o nosso Resumo Executivo, o Poster Técnico, o Pitch Deck final e, claro, o nosso Vídeo Demonstrativo.  
+
+                O projeto que levámos até à linha da meta evoluiu imenso nas últimas semanas, transformando-se num ecossistema IoT maduro, robusto e perfeitamente alinhado com as melhores práticas da engenharia atual:  
+
+                - Nova Arquitetura de Redes e Dados: Dizemos adeus à antiga lógica de adivinhar zonas na própria pulseira. Agora, o nosso dispositivo atua de forma muito mais inteligente e leve: faz a recolha contínua das forças de sinal (RSSI) de três beacons fixos no recinto (SAFEBAND_B1, B2 e B3). Quando o SOS é premido, estes dados brutos são disparados via rádio LoRa de longo alcance.  
+
+                - O Poder do Nosso Backend: A nossa Torre LoRa atua agora como um Gateway puro, reencaminhando os pacotes instantaneamente para o servidor central. É no backend que a verdadeira magia matemática acontece: o sistema corre os algoritmos de trilateração para calcular as coordenadas exatas (x,y), a área provável de busca e o nível de confiança da estimativa.  
+
+                - Dashboard e WebApp Operacionais: Desenvolvemos com sucesso as duas interfaces da nossa aplicação. O participante pode gerir o seu perfil clínico, enquanto a equipa médica tem acesso a uma dashboard interativa que plota em tempo real a localização tridimensional do paciente com um círculo de incerteza e a sua ficha médica completa (alergias, medicação e tipo de sangue).  
+
+                - Hardware no Terreno: Embora a escassez de componentes no mercado nos tenha impedido de avançar para a PCB final de fábrica, o nosso protótipo físico ficou totalmente funcional numa protoboard integrada com o módulo de vibração, botão mecânico de emergência e LEDs de sinalização visual.  
+
+                A entrega de hoje marca o fim de uma jornada académica incrível de trabalho em equipa. Criámos uma solução viável, escalável e com o potencial real de salvar vidas em grandes eventos.  
+
+                O nosso enorme obrigado a todos os que nos apoiaram, responderam aos nossos inquéritos e acompanharam esta aventura no blogue. A SafeBand está pronta!`
     }
 ];
