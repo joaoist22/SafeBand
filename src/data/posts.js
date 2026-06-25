@@ -17,6 +17,7 @@ import imgEletrical from '../assets/fotos_diversas/eletrical.jpg';
 import imgPrototipo from '../assets/fotos_diversas/prototipo.jpg';
 import imgApp from '../assets/fotos_diversas/app.png';
 import imgArquitetura from '../assets/fotos_diversas/arquitetura.png';
+import imgPCB from '../assets/fotos_diversas/pulseiraPCB.png';
 
 export const postData = [
   {
@@ -258,5 +259,38 @@ export const postData = [
                 A entrega de hoje marca o fim de uma jornada académica incrível de trabalho em equipa. Criámos uma solução viável, escalável e com o potencial real de salvar vidas em grandes eventos.  
 
                 O nosso enorme obrigado a todos os que nos apoiaram, responderam aos nossos inquéritos e acompanharam esta aventura no blogue. A SafeBand está pronta!`
+    },{
+        id: "12",
+        tag: "Ganhou Vida",
+        title: "O Nosso Protótipo, um Patrocínio de Peso e o ElectroDay!",
+        author: "João Jesus",
+        
+        // 2. Usar a variável da foto (Sem aspas!)
+        authorImage: fotoJesus, 
+        
+        // 3. O Link que vai abrir quando clicarem no teu nome/foto
+        authorLinkedIn: "https://www.linkedin.com/in/joaojesus9000",
+        
+        date: "25 Junho, 2026",
+        image: imgPCB,
+        excerpt:"O nosso protótipo ganhou vida! Com o hardware a brilhar e a vibrar com sucesso, e um patrocínio de 1000€ garantido pela AISLER para a nossa PCB, estamos prontos para a exposição final. Visitem o stand da SafeBand no ElectroDay, ganhem brindes doces e invistam as vossas ElectroCoins no nosso projeto!",
+        content:`A última semana tem sido uma autêntica montanha-russa de engenharia. Entre encomendas de última hora para encontrar os componentes perfeitos, sessões noturnas de soldadura na oficina e modelação 3D à distância, a equipa SafeBand acelerou a fundo. E as atualizações que temos para partilhar hoje são incríveis!
+
+                O Protótipo Está Vivo:
+                - Depois de redesenharmos a nossa PCB para uma versão super compacta (uns impressionantes 40x46mm), o nosso maior desafio foi o hardware físico. Após uma caça ao tesouro por um anel de LEDs com as dimensões exatas, juntámos todas as peças na bancada. O resultado final? Sucesso total.
+                - O microcontrolador está a comunicar na perfeição, o motor reage com vibração aos alertas, e o nosso anel de LEDs brilha com os padrões visuais de emergência (incluindo o efeito alternado de azul e vermelho). O nosso conceito de criar um "farol visual" no meio da multidão para guiar os médicos é, oficialmente, uma realidade tangível!
+
+                Design 3D à Prova de Fogo (e de Calor):
+                - Para acomodar a eletrónica com elegância, a caixa da pulseira foi desenhada de raiz em CAD. O modelo 3D foi afinado ao milímetro de forma remota. A nova estrutura foi cuidadosamente planeada para abraçar a PCB e o anel luminoso, garantindo que o dispositivo se mantém ergonómico, leve e esteticamente apelativo, sem parecer um relógio gigante.
+
+                Patrocínio AISLER: O Futuro Assegurado
+                - No meio de toda a loucura da montagem do protótipo, fomos surpreendidos com uma notícia fantástica: a AISLER, gigante do fabrico de circuitos integrados, acreditou no potencial da SafeBand! Fomos selecionados para o programa de patrocínio e garantimos um plafond de 1000€ para a produção das nossas futuras PCBs. Isto significa que temos financiamento e luz verde técnica para evoluir o nosso hardware atual para uma versão profissional de nível industrial.
+
+                Rumo ao ElectroDay: Invistam na SafeBand!
+                - Agora, todas as nossas atenções viram-se para a grande exposição. O ElectroDay não é apenas uma feira, é um autêntico mercado de inovação, e nós precisamos de vocês!
+
+                Venham conhecer a equipa, interagir com o nosso protótipo físico, ver a dashboard médica ao vivo e, claro, levar um dos nossos brindes!
+
+                A segurança nos festivais do futuro começa aqui. Contamos com o vosso apoio!`
     }
 ];
